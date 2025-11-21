@@ -1,0 +1,60 @@
+volumes:
+  my_stack_local_postgres_data: {}
+  my_stack_local_postgres_data_backups: {}
+  
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: my_stack_production_postgres
+    container_name: my_stack_local_postgres
+    volumes:
+      - my_stack_local_postgres_data:/var/lib/postgresql/18/docker
+      - my_stack_local_postgres_data_backups:/backups
+    env_file:
+      - ./.envs/.local/.postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./choppi-backend
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ./.envs/.local/.backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./choppi-backend:/app
+      - /app/node_modules
+    command: npm run start:dev
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev
+
+  flutter:
+    image: cirrusci/flutter:latest
+    working_dir: /app
+    volumes:
+      - ./flutter:/app
+    ports:
+      - "8080:8080"
+    command: flutter doctor
+    # Para desarrollo, puedes cambiar el command a bash para entrar al contenedor
