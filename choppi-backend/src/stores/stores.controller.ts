@@ -11,7 +11,7 @@ export class StoresController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT-auth')
   @ApiOperation({
     summary: 'Create a new store',
     description: 'Creates a new store. Requires authentication.'
@@ -147,7 +147,7 @@ export class StoresController {
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT-auth')
   @ApiOperation({
     summary: 'Update a store',
     description: 'Updates an existing store. All fields are optional. Requires authentication.'
@@ -203,7 +203,7 @@ export class StoresController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT-auth')
   @ApiOperation({
     summary: 'Delete a store (soft delete)',
     description: 'Soft deletes a store by setting isActive to false. Requires authentication.'

@@ -11,7 +11,7 @@ export class StoreProductsController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT-auth')
   @ApiOperation({
     summary: 'Add a product to a store',
     description: 'Associates an existing global product with a store, setting store-specific price and stock. Requires authentication.'
@@ -264,7 +264,7 @@ export class StoreProductsController {
 
   @Patch(':storeProductId')
   @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT-auth')
   @ApiOperation({
     summary: 'Update a store product',
     description: 'Updates price, stock, or active status of a product in a store. Requires authentication.'
@@ -350,7 +350,7 @@ export class StoreProductsController {
 
   @Delete(':storeProductId')
   @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT-auth')
   @ApiOperation({
     summary: 'Remove a product from a store (soft delete)',
     description: 'Soft deletes a product from a store by setting isActive to false. Requires authentication.'

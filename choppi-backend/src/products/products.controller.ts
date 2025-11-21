@@ -11,7 +11,7 @@ export class ProductsController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT-auth')
   @ApiOperation({
     summary: 'Create a new product',
     description: 'Creates a new global product that can be associated with stores. Requires authentication.'
@@ -174,7 +174,7 @@ export class ProductsController {
 
   @Put(':id')
   @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT-auth')
   @ApiOperation({
     summary: 'Update a product',
     description: 'Updates an existing global product. Requires authentication.'
@@ -216,7 +216,7 @@ export class ProductsController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT-auth')
   @ApiOperation({
     summary: 'Delete a product',
     description: 'Soft deletes a global product (sets isActive to false). Requires authentication.'
