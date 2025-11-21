@@ -98,6 +98,36 @@ async findAll(@Query() query: GetQueryDto) { ... }
 - **API Calls**: Axios with SWR for data fetching
 - **Forms**: React Hook Form with Zod validation
 
+#### Feature-Based Architecture
+All frontend modules must follow this feature-based architecture for maintainability and scalability:
+
+##### Module Structure
+```
+src/views/[module]/
+├── views/              # Page components (Next.js pages)
+├── components/         # UI components specific to this module
+├── store/              # Zustand stores for global state management
+├── hooks/              # Reusable custom hooks
+├── repositories/       # Data access layer (API calls, local storage)
+├── services/           # Business logic layer (data transformation, validation)
+└── types/              # TypeScript types/interfaces for this module
+```
+
+##### Data Flow
+- **Global State**: All data flows through Zustand stores for cross-component communication
+- **Actions**: Store actions can be used across different components and views
+- **Typing**: Strongly typed with TypeScript, synchronized with backend types
+- **Synchronization**: Frontend types must match backend DTOs exactly
+
+##### Module Creation Workflow
+1. **Define Types**: Create types/interfaces matching backend DTOs
+2. **Implement Repository**: Create API calls with proper typing
+3. **Create Service**: Business logic layer calling repositories
+4. **Configure Store**: Zustand store with actions and state
+5. **Build Components**: Reusable components following ECME template
+6. **Create Views**: Page components using components and store
+7. **Add Routing**: Configure Next.js App Router routes
+
 #### Frontend Structure
 - **File Structure**: Feature-based in `views/`, shared components in `components/`
 - **TypeScript**: Strict typing with custom `@types/`

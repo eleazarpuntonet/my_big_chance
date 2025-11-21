@@ -6,6 +6,12 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Enable CORS
+  app.enableCors({
+    origin: ['http://localhost:5000', 'http://localhost:3001'], // Allow frontend origins
+    credentials: true,
+  });
+
   // Enable global validation pipes
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,

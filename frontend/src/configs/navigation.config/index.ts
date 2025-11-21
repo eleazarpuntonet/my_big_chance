@@ -5,14 +5,12 @@ import authNavigationConfig from './auth.navigation.config'
 import guideNavigationConfig from './guide.navigation.config'
 import type { NavigationTree } from '@/@types/navigation'
 import parametersNavigationConfig from './parameters.navigation.config'
+import storesNavigationConfig from './stores.navigation.config'
+import productsNavigationConfig from './products.navigation.config'
 
 const navigationConfig: NavigationTree[] = [
-    ...parametersNavigationConfig,
-    // ...dashboardsNavigationConfig,
-    ...conceptsNavigationConfig,
-    // ...uiComponentNavigationConfig,
-    ...authNavigationConfig,
-    // ...guideNavigationConfig,
+    ...storesNavigationConfig,
+    ...productsNavigationConfig
 ]
 
 export default navigationConfig

@@ -7,15 +7,19 @@ import guideRoute from './guideRoute'
 import othersRoute from './othersRoute'
 import type { Routes } from '@/@types/routes'
 import parametersRoute from './parameters'
+import productsRoute from './productsRoute'
+import storesRoute from './storesRoute'
 
 export const publicRoutes: Routes = [...authRoute]
 
 export const protectedRoutes: Routes = [
     // ...dashboardsRoute,
-    ...conceptsRoute,
+    // ...conceptsRoute,
     // ...uiComponentsRoute,
-    ...authDemoRoute,
+    // ...authDemoRoute,
     // ...guideRoute,
     // ...othersRoute,
-    ...parametersRoute
+    ...parametersRoute,
+    ...productsRoute,
+    ...storesRoute
 ]

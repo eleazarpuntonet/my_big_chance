@@ -8,7 +8,7 @@ const parametersRoute: Routes = [
         key: 'settings.parameters.countries',
         path: `${SETTINGS_PREFIX_PATH}/parameters/countries`,
         component: lazy(() => import('@/views/parameters/countries/CountryList')),
-        authority: [ADMIN, USER],
+        authority: [],
         meta: {
             pageContainerType: 'contained',
         },
