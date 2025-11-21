@@ -42,14 +42,12 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
-    environment:
-      NEXT_PUBLIC_API_URL: http://localhost:3000
     ports:
-      - "3001:3001"
+      - "5000:5173"
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    command: npm run dev
+    command: npm run start
 
   flutter:
     image: cirrusci/flutter:latest

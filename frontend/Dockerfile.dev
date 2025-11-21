@@ -1,12 +1,18 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
+# Copiar archivos de dependencias primero
 COPY package*.json ./
+
+# Instalar dependencias
 RUN npm install
 
+# Copiar el resto del código fuente
 COPY . .
 
-EXPOSE 3001
+# Exponer el puerto
+EXPOSE 5173
 
-CMD ["npm", "run", "dev"]
+# Comando por defecto (puede ser sobreescrito en docker-compose)
+CMD ["npm", "run", "start"]
