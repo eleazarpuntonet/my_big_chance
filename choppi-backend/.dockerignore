@@ -1,0 +1,7 @@
+node_modules
+npm-debug.log
+dist
+.env
+database.sqlite
+coverage
+.nyc_output

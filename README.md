@@ -69,7 +69,7 @@ Comparte links a repo(s), deploy(s) y Swagger; incluye APK si usaste Flutter.
 1. Clona el repositorio.
 2. Asegúrate de tener Docker y Docker Compose instalados.
 3. Copia los archivos de configuración necesarios (ej. .env).
-4. Ejecuta `docker-compose up --build` para iniciar los servicios.
+4. Ejecuta `docker compose up --build` para iniciar los servicios.
 5. Accede a:
    - Backend: http://localhost:3000
    - Frontend: http://localhost:3001

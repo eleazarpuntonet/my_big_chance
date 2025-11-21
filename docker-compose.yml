@@ -12,6 +12,8 @@ services:
     volumes:
       - my_stack_local_postgres_data:/var/lib/postgresql/18/docker
       - my_stack_local_postgres_data_backups:/backups
+    ports:
+      - "8832:5432"
     env_file:
       - ./.envs/.local/.postgres
     healthcheck:

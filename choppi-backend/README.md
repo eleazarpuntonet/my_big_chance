@@ -1,98 +1,158 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Choppi Backend (NestJS)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend API for the Choppi full-stack application built with NestJS, TypeORM, and PostgreSQL.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- **Authentication**: JWT-based authentication with login/register
+- **Stores Management**: CRUD operations for stores with pagination and search
+- **Products Catalog**: Global product management
+- **Store Products**: Per-store product inventory with pricing and stock
+- **Cart Calculation**: Optional cart quote endpoint
+- **Swagger Documentation**: Complete API documentation
+- **Database Seeding**: Sample data for development
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tech Stack
 
-## Project setup
+- **Framework**: NestJS
+- **Database**: PostgreSQL with TypeORM
+- **Authentication**: JWT with Passport
+- **Validation**: class-validator
+- **Documentation**: Swagger/OpenAPI
+- **Testing**: Jest
+
+## Installation
 
 ```bash
-$ npm install
+# Install dependencies
+npm install
 ```
 
-## Compile and run the project
+## Environment Variables
+
+Copy `.env.example` to `.env` and configure:
 
 ```bash
-# development
-$ npm run start
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=your_db_username
+DB_PASSWORD=your_db_password
+DB_DATABASE=your_db_name
 
-# watch mode
-$ npm run start:dev
+# JWT Configuration
+JWT_SECRET=your-super-secret-jwt-key
 
-# production mode
-$ npm run start:prod
+# Application Configuration
+NODE_ENV=development
+PORT=3000
 ```
 
-## Run tests
+## Database Setup
+
+The application uses TypeORM with synchronization enabled for development. For production, use migrations.
+
+## Running the Application
 
 ```bash
-# unit tests
-$ npm run test
+# Development mode with hot reload
+npm run start:dev
 
-# e2e tests
-$ npm run test:e2e
+# Production mode
+npm run start:prod
 
-# test coverage
-$ npm run test:cov
+# Debug mode
+npm run start:debug
 ```
 
-## Deployment
+## Seeding the Database
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+To populate the database with sample data:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm run seed
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+This will create:
+- 3 sample stores
+- 20 sample products
+- Store-product associations with varying prices and stock
 
-## Resources
+## API Documentation
 
-Check out a few resources that may come in handy when working with NestJS:
+Once the application is running, visit:
+- **Swagger UI**: http://localhost:3000/api
+- **Application**: http://localhost:3000
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## API Endpoints
 
-## Support
+### Authentication
+- `POST /auth/register` - Register a new user
+- `POST /auth/login` - Login user
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Stores
+- `GET /stores` - Get all stores (paginated, searchable)
+- `GET /stores/:id` - Get store by ID
+- `POST /stores` - Create store (requires auth)
+- `PATCH /stores/:id` - Update store (requires auth)
+- `DELETE /stores/:id` - Delete store (requires auth)
 
-## Stay in touch
+### Products
+- `GET /products/:id` - Get product by ID
+- `POST /products` - Create product (requires auth)
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Store Products
+- `POST /stores/:storeId/products` - Add product to store (requires auth)
+- `GET /stores/:storeId/products` - Get store products (paginated, filtered)
+- `PATCH /stores/:storeId/products/:storeProductId` - Update store product (requires auth)
+- `DELETE /stores/:storeId/products/:storeProductId` - Remove product from store (requires auth)
+
+### Cart (Optional)
+- `POST /cart/quote` - Calculate cart total price
+
+## Testing
+
+```bash
+# Unit tests
+npm run test
+
+# E2E tests
+npm run test:e2e
+
+# Test coverage
+npm run test:cov
+```
+
+## Project Structure
+
+```
+src/
+├── auth/                 # Authentication module
+├── cart/                 # Cart calculation module
+├── entities/             # TypeORM entities
+├── products/             # Products module
+├── seeds/                # Database seeding
+├── store-products/       # Store products module
+├── stores/               # Stores module
+├── app.controller.ts     # Main controller
+├── app.module.ts         # Main module
+├── app.service.ts        # Main service
+└── main.ts              # Application entry point
+```
+
+## Docker Development
+
+The application is configured to work with Docker Compose. See the main project README for Docker setup instructions.
+
+## Production Deployment
+
+For production deployment:
+1. Set `NODE_ENV=production`
+2. Use database migrations instead of synchronization
+3. Configure proper JWT secret
+4. Set up proper database credentials
+5. Use a process manager like PM2
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is part of the Choppi technical assessment.
