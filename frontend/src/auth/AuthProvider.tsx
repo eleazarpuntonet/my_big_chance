@@ -15,6 +15,7 @@ import type {
 } from '@/@types/auth'
 import type { ReactNode, Ref } from 'react'
 import type { NavigateFunction } from 'react-router-dom'
+import AxiosBase from '@/services/axios/AxiosBase'
 
 type AuthProviderProps = { children: ReactNode }
 
@@ -58,7 +59,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
 
     const handleSignIn = (tokens: Token, user?: User) => {
-        setToken(tokens.accessToken)
+        setToken(tokens.access_token)
         setSessionSignedIn(true)
 
         if (user) {
@@ -75,8 +76,13 @@ function AuthProvider({ children }: AuthProviderProps) {
     const signIn = async (values: SignInCredential): AuthResult => {
         try {
             const resp = await apiSignIn(values)
-            if (resp) {
-                handleSignIn({ accessToken: resp.token }, resp.user)
+            if(resp) {
+                if(resp.access_token != null) {
+                    const newAccessToken = resp.access_token
+                    AxiosBase.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`
+                    setToken(newAccessToken)
+                }
+                handleSignIn({ access_token: resp.access_token }, {})
                 redirect()
                 return {
                     status: 'success',

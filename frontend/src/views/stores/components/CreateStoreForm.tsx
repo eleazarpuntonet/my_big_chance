@@ -3,7 +3,7 @@ import { Button, Form, FormItem, Input } from '@/components/ui'
 import { Controller, useForm } from 'react-hook-form'
 import { useStoreStore } from '../store/useStoreStore'
 import { CreateStoreDto } from '../types/store.types'
-import { TbBuildingStorefront, TbPlus } from 'react-icons/tb'
+import { TbPlus } from 'react-icons/tb'
 import { Notification, toast } from '@/components/ui'
 import { AxiosError } from 'axios'
 
@@ -144,7 +144,7 @@ const CreateStoreForm: React.FC<CreateStoreFormProps> = ({
             <Button
               type='button'
               size="sm"
-              icon={<TbBuildingStorefront />}
+              icon={<TbPlus />}
               onClick={handleClear}
               className="px-3 py-1 bg-gray-600 text-white hover:bg-gray-700"
             >

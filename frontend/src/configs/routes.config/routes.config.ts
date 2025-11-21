@@ -19,7 +19,7 @@ export const protectedRoutes: Routes = [
     // ...authDemoRoute,
     // ...guideRoute,
     // ...othersRoute,
-    ...parametersRoute,
+    // ...parametersRoute,
     ...productsRoute,
     ...storesRoute
 ]

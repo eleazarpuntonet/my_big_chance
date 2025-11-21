@@ -4,14 +4,7 @@ export type SignInCredential = {
 }
 
 export type SignInResponse = {
-    token: string
-    user: {
-        userId: string
-        userName: string
-        authority: string[]
-        avatar: string
-        email: string
-    }
+    access_token: string
 }
 
 export type SignUpResponse = SignInResponse
@@ -46,7 +39,7 @@ export type User = {
 }
 
 export type Token = {
-    accessToken: string
+    access_token: string
     refereshToken?: string
 }
 

@@ -10,7 +10,7 @@ export type AppConfig = {
 
 const appConfig: AppConfig = {
     apiPrefix: 'http://localhost:3000/',
-    authenticatedEntryPath: '/concepts/customers/customer-list',
+    authenticatedEntryPath: '/stores',
     unAuthenticatedEntryPath: '/sign-in',
     locale: 'es',
     accessTokenPersistStrategy: 'localStorage',
