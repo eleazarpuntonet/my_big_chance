@@ -5,18 +5,22 @@ entryPoints:
   web:
     address: ':80'
 
+  web-backend:
+    address: ':8000'
+
 http:
   routers:
     frontend-router:
-      rule: "PathPrefix(`/app`)"
+      # rule: "PathPrefix(`/home`)" 
+      rule: "Host(`172.31.75.75`)"
       entryPoints:
         - web
       service: nginx-frontend
 
     backend-router:
-      rule: "PathPrefix(`/api`)"
+      rule: "Host(`172.31.75.75`) || PathPrefix(`/api`)"
       entryPoints:
-        - web
+        - web-backend
       service: nginx-backend
 
   services:

@@ -1,4 +1,3 @@
 # Frontend Environment Variables for Production
 # ------------------------------------------------------------------------------
-# Railway assigns a dynamic URL, set VITE_APIURL in Railway dashboard to https://your-app-name.railway.app/api
-VITE_APIURL=https://your-app-name.railway.app/api
+VITE_APIURL=http://172.31.75.75:8000/
