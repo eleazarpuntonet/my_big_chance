@@ -65,10 +65,6 @@ export const SignInBase = ({
                     </p>
                     <div className="border-t border-gray-200 dark:border-gray-800 flex-1 mt-[1px]" />
                 </div>
-                <OauthSignIn
-                    disableSubmit={disableSubmit}
-                    setMessage={setMessage}
-                />
             </div>
             <div>
                 <div className="mt-6 text-center">

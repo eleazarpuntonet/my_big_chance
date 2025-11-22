@@ -69,16 +69,26 @@ Comparte links a repo(s), deploy(s) y Swagger; incluye APK si usaste Flutter.
 1. Clona el repositorio.
 2. Asegúrate de tener Docker y Docker Compose instalados.
 3. Copia los archivos de configuración necesarios (ej. .env).
-4. Ejecuta `docker compose up --build` para iniciar los servicios.
-5. Accede a:
-   - Backend: http://localhost:3000
-   - Frontend: http://localhost:3001
-   - Flutter: Entra al contenedor y ejecuta comandos de Flutter.
+4. Para desarrollo: Ejecuta `docker compose up --build` para iniciar los servicios.
+5. Para producción: Ejecuta `docker compose -f docker-compose.production.yml up --build`.
+6. Accede a:
+   - **Desarrollo**:
+     - Backend: http://localhost:3000
+     - Frontend: http://localhost:5000
+   - **Producción** (a través de Traefik):
+     - Frontend: http://172.31.75.75/app
+     - Backend API: http://172.31.75.75/api (Swagger: /api)
+     - Traefik maneja el enrutamiento en el puerto 80
+
+## Enrutamiento con Traefik
+En producción, Traefik actúa como reverse proxy y enruta las solicitudes basándose en el host y path:
+- `http://172.31.75.75/app/*` → Nginx Frontend (sirve la aplicación React)
+- `http://172.31.75.75/api/*` → Nginx Backend (proxy a la API NestJS)
 
 ## Variables de Entorno
 - DATABASE_URL: URL de conexión a PostgreSQL.
 - JWT_SECRET: Secreto para JWT.
-- NEXT_PUBLIC_API_URL: URL del backend para el frontend.
+- NEXT_PUBLIC_API_URL: URL del backend para el frontend (en producción: http://172.31.75.75/api).
 
 ## Migraciones y Seeds
 - Ejecuta las migraciones en el contenedor de backend.

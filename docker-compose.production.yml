@@ -12,8 +12,6 @@ services:
     volumes:
       - my_stack_production_postgres_data:/var/lib/postgresql/18/docker
       - my_stack_production_postgres_data_backups:/backups
-    ports:
-      - "8832:5432"
     env_file:
       - ./.envs/.production/.postgres
     healthcheck:
@@ -21,6 +19,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - my_stack_network
+    ports:
+      - "8832:5432"
 
   backend:
     build:
@@ -35,6 +37,8 @@ services:
       - my_stack_network
 
   nginx_frontend:
+    env_file:
+      - ./.envs/.production/.frontend
     build:
       context: .
       dockerfile: ./compose/production/nginx/Dockerfile.frontend
@@ -58,7 +62,7 @@ services:
       - ./compose/production/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
     ports:
       - "80:80"
-      - "443:443"
+      - "8000:8000"
     networks:
       - my_stack_network
 

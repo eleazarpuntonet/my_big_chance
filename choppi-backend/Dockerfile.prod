@@ -15,6 +15,9 @@ COPY . .
 # Build the application
 RUN npm run build
 
+# Compile seed script
+RUN npx tsc seed.ts --outDir dist --target ES2023 --module nodenext --moduleResolution nodenext --esModuleInterop --allowSyntheticDefaultImports --experimentalDecorators --emitDecoratorMetadata
+
 # Production stage
 FROM node:20-alpine
 
@@ -24,10 +27,13 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install only production dependencies
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci && npm cache clean --force
 
 # Copy built application
 COPY --from=builder /app/dist ./dist
+
+# Copy compiled seed script
+COPY --from=builder /app/dist/seed.js ./seed.js
 
 # Expose port
 EXPOSE 3000

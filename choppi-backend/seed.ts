@@ -1,9 +1,15 @@
 import { NestFactory } from '@nestjs/core';
-import { SeedsModule } from './src/seeds/seeds.module';
-import { SeedsService } from './src/seeds/seeds.service';
-import { AppModule } from './src/app.module';
+
+// Dynamic imports based on environment
+const isProduction = process.env.NODE_ENV === 'production';
+const basePath = isProduction ? './dist/src' : './src';
+const ext = isProduction ? '.js' : '';
 
 async function bootstrap() {
+  // Dynamic imports
+  const { AppModule } = await import(`${basePath}/app.module${ext}`);
+  const { SeedsService } = await import(`${basePath}/seeds/seeds.service${ext}`);
+
   const app = await NestFactory.createApplicationContext(AppModule);
   const seedsService = app.get(SeedsService);
 

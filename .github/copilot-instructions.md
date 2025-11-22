@@ -15,12 +15,29 @@ This is a full-stack e-commerce application with **NestJS backend architecture**
 # From project root - starts all services with hot reload
 docker compose up --build
 
-# Services endpoints:
+# Services endpoints (development):
 # - Backend (NestJS): http://localhost:3000 (Swagger: /api)
 # - Frontend (Next.js): http://localhost:5000
 # - PostgreSQL: localhost:8832 (internal only)
 # - Flutter: localhost:8080 (for development)
 ```
+
+### Production Setup with Traefik
+```bash
+# Production with Traefik routing
+docker compose -f docker-compose.production.yml up --build
+
+# Services endpoints (production via Traefik):
+# - Frontend: http://172.31.75.75/app
+# - Backend API: http://172.31.75.75/api (Swagger: /api)
+# - Traefik: http://172.31.75.75 (port 80)
+# - PostgreSQL: Internal only, not exposed
+```
+
+### Traefik Routing
+Traefik handles routing based on host and path prefixes:
+- `Host(172.31.75.75) && PathPrefix(/app)` → nginx_frontend
+- `Host(172.31.75.75) && PathPrefix(/api)` → nginx_backend
 
 ### Database Operations
 ```bash
@@ -630,10 +647,11 @@ docker-compose.yml     # Multi-service orchestration
 3. **Database**: Manual schema updates (no auto-migration)
 4. **Auth**: Check permissions in guards, update role/permission entities
 
-### API Integration
+#### API Integration
 - Use `ApiService.fetchDataWithAxios<T>()` for typed requests
 - Handle errors in `catch` blocks with appropriate user feedback
 - Include loading states for async operations
 - **Architecture**: Always follow service → repository → ApiService pattern
-- **No fetch**: Never use `fetch` directly, always use ApiService through repository layer</content>
+- **No fetch**: Never use `fetch` directly, always use ApiService through repository layer
+- **Production API URL**: In production, frontend calls `http://172.31.75.75/api`
 <parameter name="filePath">d:\Workplace\my_full_stack\.github\copilot-instructions.md
