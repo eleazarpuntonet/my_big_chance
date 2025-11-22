@@ -12,13 +12,13 @@ http:
   routers:
     frontend-router:
       # rule: "PathPrefix(`/home`)" 
-      rule: "Host(`172.31.75.75`)"
+      rule: "Host(`172.31.75.75`) || Host(`18.218.246.134`)"
       entryPoints:
         - web
       service: nginx-frontend
 
     backend-router:
-      rule: "Host(`172.31.75.75`) || PathPrefix(`/api`)"
+      rule: "Host(`172.31.75.75`)|| Host(`18.218.246.134`) || PathPrefix(`/api`)"
       entryPoints:
         - web-backend
       service: nginx-backend
