@@ -39,6 +39,8 @@ services:
     command: npm run start:dev
 
   frontend:
+    env_file:
+      - ./.envs/.local/.frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
@@ -48,13 +50,3 @@ services:
       - ./frontend:/app
       - /app/node_modules
     command: npm run start
-
-  flutter:
-    image: cirrusci/flutter:latest
-    working_dir: /app
-    volumes:
-      - ./flutter:/app
-    ports:
-      - "8080:8080"
-    command: flutter doctor
-    # Para desarrollo, puedes cambiar el command a bash para entrar al contenedor

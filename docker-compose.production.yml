@@ -1,0 +1,67 @@
+volumes:
+  my_stack_production_postgres_data: {}
+  my_stack_production_postgres_data_backups: {}
+
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: my_stack_production_postgres
+    container_name: my_stack_production_postgres
+    volumes:
+      - my_stack_production_postgres_data:/var/lib/postgresql/18/docker
+      - my_stack_production_postgres_data_backups:/backups
+    ports:
+      - "8832:5432"
+    env_file:
+      - ./.envs/.production/.postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./choppi-backend
+      dockerfile: Dockerfile.prod
+    env_file:
+      - ./.envs/.production/.backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - my_stack_network
+
+  nginx_frontend:
+    build:
+      context: .
+      dockerfile: ./compose/production/nginx/Dockerfile.frontend
+    networks:
+      - my_stack_network
+
+  nginx_backend:
+    build:
+      context: .
+      dockerfile: ./compose/production/nginx/Dockerfile.backend
+    depends_on:
+      - backend
+    networks:
+      - my_stack_network
+
+  traefik:
+    build:
+      context: .
+      dockerfile: ./compose/production/traefik/Dockerfile
+    volumes:
+      - ./compose/production/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - my_stack_network
+
+networks:
+  my_stack_network:
+    driver: bridge
