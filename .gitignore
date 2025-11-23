@@ -25,3 +25,7 @@ build
 *.sln
 *.sw?
 .vite-cache/
+./docker_images/
+docker_images/
+docker_images
+*.zip

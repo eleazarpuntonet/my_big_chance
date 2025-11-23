@@ -4,9 +4,6 @@ volumes:
 
 services:
   postgres:
-    build:
-      context: .
-      dockerfile: ./compose/production/postgres/Dockerfile
     image: myapp_postgres
     container_name: myapp_postgres
     volumes:
@@ -27,9 +24,6 @@ services:
   backend:
     image: myapp_backend
     container_name: myapp_backend
-    build:
-      context: ./choppi-backend
-      dockerfile: Dockerfile.prod
     env_file:
       - ./.envs/.production/.backend
     depends_on:
@@ -43,18 +37,12 @@ services:
     container_name: myapp_nginx_frontend
     env_file:
       - ./.envs/.production/.frontend
-    build:
-      context: .
-      dockerfile: ./compose/production/nginx/Dockerfile.frontend
     networks:
       - my_stack_network
 
   nginx_backend:
     image: myapp_nginx_backend
     container_name: myapp_nginx_backend
-    build:
-      context: .
-      dockerfile: ./compose/production/nginx/Dockerfile.backend
     depends_on:
       - backend
     networks:
@@ -63,9 +51,6 @@ services:
   traefik:
     image: myapp_traefik
     container_name: myapp_traefik
-    build:
-      context: .
-      dockerfile: ./compose/production/traefik/Dockerfile
     volumes:
       - ./compose/production/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
     ports:

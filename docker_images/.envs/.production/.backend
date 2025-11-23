@@ -1,0 +1,17 @@
+# Database Configuration (SQLite for local development)
+DB_TYPE=sqlite
+
+# JWT Configuration
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+
+# Application Configuration
+NODE_ENV=production
+PORT=3000
+
+
+# Database Configuration
+DB_HOST=postgres
+DB_PORT=5432
+DB_USERNAME=admin
+DB_PASSWORD=admin123
+DB_DATABASE=my_stack
