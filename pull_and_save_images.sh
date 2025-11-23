@@ -22,12 +22,11 @@ log "Starting build and save images script"
 # docker compose -f docker-compose.production.yml build
 
 log "Saving Docker images"
-docker save -o docker_images/my_full_stack-backend.tar my_full_stack-backend
-docker save -o docker_images/my_full_stack-nginx_backend.tar my_full_stack-nginx_backend
-docker save -o docker_images/my_full_stack-nginx_frontend.tar my_full_stack-nginx_frontend
-docker save -o docker_images/my_full_stack-traefik.tar my_full_stack-traefik
-docker save -o docker_images/my_stack_production_postgres.tar my_stack_production_postgres
-
+docker save -o docker_images/myapp_postgres.tar myapp_postgres
+docker save -o docker_images/myapp_nginx_backend.tar myapp_nginx_backend
+docker save -o docker_images/myapp_nginx_frontend.tar myapp_nginx_frontend
+docker save -o docker_images/myapp_traefik.tar myapp_traefik
+docker save -o docker_images/myapp_backend.tar myapp_backend
 log "Creating zip archive"
 cd docker_images || { log "Failed to cd to docker_images"; exit 1; }
 zip -r docker_images.zip ./*.tar

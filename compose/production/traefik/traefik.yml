@@ -17,7 +17,7 @@ http:
       service: nginx-frontend
 
     backend-router:
-      rule: "Host(`172.31.75.75`) || Host(`18.218.246.134`)"
+      rule: "Host(`172.31.75.75`) && PathPrefix(`/api`) || Host(`18.218.246.134`) && PathPrefix(`/api`)"
       entryPoints:
         - web-backend
       service: nginx-backend
