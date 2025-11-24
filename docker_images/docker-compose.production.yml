@@ -52,7 +52,7 @@ services:
     image: myapp_traefik
     container_name: myapp_traefik
     volumes:
-      - ./compose/production/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
     ports:
       - "80:80"
       - "8000:8000"

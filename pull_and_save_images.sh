@@ -29,6 +29,6 @@ docker save -o docker_images/myapp_traefik.tar myapp_traefik
 docker save -o docker_images/myapp_backend.tar myapp_backend
 log "Creating zip archive"
 cd docker_images || { log "Failed to cd to docker_images"; exit 1; }
-zip -r docker_images.zip ./*.tar
+zip -r docker_images.zip ./*
 
 log "Script execution completed"
