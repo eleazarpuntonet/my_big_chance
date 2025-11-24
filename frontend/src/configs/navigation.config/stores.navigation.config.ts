@@ -9,8 +9,8 @@ const storesNavigationConfig: NavigationTree[] = [
     {
         key: 'stores',
         path: '',
-        title: 'Stores',
-        translateKey: 'Stores',
+        title: 'Tiendas',
+        translateKey: 'Tiendas',
         icon: 'PiShoppingCartDuotone',
         type: NAV_ITEM_TYPE_TITLE,
         authority: [ADMIN, USER],
@@ -24,15 +24,15 @@ const storesNavigationConfig: NavigationTree[] = [
             {
                 key: 'stores.list',
                 path: '/stores',
-                title: 'All Stores',
-                translateKey: 'All Stores',
+                title: 'Todas las Tiendas',
+                translateKey: 'Todas las Tiendas',
                 icon: 'PiShoppingCartDuotone',
                 type: NAV_ITEM_TYPE_ITEM,
                 authority: [ADMIN, USER],
                 meta: {
                     description: {
                         translateKey: 'nav.stores.listDesc',
-                        label: 'Browse and search stores',
+                        label: 'Explorar y buscar tiendas',
                     },
                 },
                 subMenu: [],
@@ -40,15 +40,15 @@ const storesNavigationConfig: NavigationTree[] = [
             {
                 key: 'stores.admin',
                 path: '/stores/admin',
-                title: 'Manage Stores',
-                translateKey: 'Manage Stores',
+                title: 'Administrar Tiendas',
+                translateKey: 'Administrar Tiendas',
                 icon: 'PiShoppingCartDuotone',
                 type: NAV_ITEM_TYPE_ITEM,
                 authority: [ADMIN],
                 meta: {
                     description: {
                         translateKey: 'nav.stores.adminDesc',
-                        label: 'Create and edit stores',
+                        label: 'Crear y editar tiendas',
                     },
                 },
                 subMenu: [],

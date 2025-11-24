@@ -81,11 +81,11 @@ const StoreDetail = () => {
         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <TbBuildingStore className="w-8 h-8 text-gray-400" />
         </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">Store not found</h3>
-        <p className="text-gray-500">The store you're looking for doesn't exist or has been removed.</p>
+        <h3 className="text-lg font-medium text-gray-900 mb-2">Tienda no encontrada</h3>
+        <p className="text-gray-500">La tienda que buscas no existe o ha sido eliminada.</p>
         <Button onClick={() => navigate('/stores')} className="mt-4">
           <TbArrowLeft className="w-4 h-4 mr-2" />
-          Back to Stores
+          Volver a Tiendas
         </Button>
       </div>
     )
@@ -94,29 +94,35 @@ const StoreDetail = () => {
   return (
     <div className="max-w-6xl mx-auto">
       {/* Store Header */}
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-t-xl mb-6">
+      <div className="bg-[#FAA531] p-4 rounded-t-xl mb-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <TbBuildingStore className="w-6 h-6 text-white mr-3" />
-            <h4 className="text-lg font-semibold text-white">{currentStore.name}</h4>
+            <TbBuildingStore className="w-6 h-6 text-[#111827] mr-3" />
+            <h4 className="text-lg font-semibold text-[#111827]">{currentStore.name}</h4>
           </div>
           <Button
             onClick={() => navigate('/stores')}
-            className="bg-white/10 hover:bg-white/20 text-white border-white/20"
+            className="bg-white/10 hover:bg-white/20 text-[#111827] border-white/20"
           >
             <TbArrowLeft className="w-4 h-4 mr-2" />
-            Back to Stores
+            Volver a Tiendas
           </Button>
         </div>
       </div>
 
       {/* Store Info */}
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden mb-6">
+        <div className="bg-[#FAA531] p-4">
+          <div className="flex items-center">
+            <TbBuildingStore className="w-6 h-6 text-[#111827] mr-3" />
+            <h4 className="text-lg font-semibold text-[#111827]">Información de la Tienda</h4>
+          </div>
+        </div>
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {currentStore.description && (
               <div>
-                <h5 className="font-medium text-gray-900 mb-2">Description</h5>
+                <h5 className="font-medium text-gray-900 mb-2">Descripción</h5>
                 <p className="text-gray-600">{currentStore.description}</p>
               </div>
             )}
@@ -140,10 +146,10 @@ const StoreDetail = () => {
 
       {/* Products Section */}
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-        <div className="bg-gradient-to-r from-green-500 to-blue-600 p-4">
+        <div className="bg-[#FAA531] p-4">
           <div className="flex items-center">
-            <TbPackage className="w-6 h-6 text-white mr-3" />
-            <h4 className="text-lg font-semibold text-white">Products</h4>
+            <TbPackage className="w-6 h-6 text-[#111827] mr-3" />
+            <h4 className="text-lg font-semibold text-[#111827]">Productos</h4>
           </div>
         </div>
         <div className="p-6">
@@ -151,14 +157,14 @@ const StoreDetail = () => {
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <div className="flex-1">
               <Input
-                placeholder="Search products..."
+                placeholder="Buscar productos..."
                 value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
                 prefix={<TbSearch className="text-gray-400" />}
               />
             </div>
             <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-600">In Stock Only</span>
+              <span className="text-sm text-gray-600">Solo en Stock</span>
               <Switcher checked={inStockOnly} onChange={handleInStockToggle} />
             </div>
           </div>
@@ -169,8 +175,8 @@ const StoreDetail = () => {
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <TbPackage className="w-8 h-8 text-gray-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No products found</h3>
-              <p className="text-gray-500">Try adjusting your search or filters.</p>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No se encontraron productos</h3>
+              <p className="text-gray-500">Intenta ajustar tu búsqueda o filtros.</p>
             </div>
           ) : (
             <>
@@ -187,7 +193,7 @@ const StoreDetail = () => {
                           ? 'bg-green-100 text-green-800'
                           : 'bg-red-100 text-red-800'
                       }`}>
-                        {storeProduct.stock > 0 ? `${storeProduct.stock} in stock` : 'Out of stock'}
+                        {storeProduct.stock > 0 ? `${storeProduct.stock} en stock` : 'Agotado'}
                       </span>
                     </div>
                     {storeProduct.product.description && (

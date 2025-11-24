@@ -9,8 +9,8 @@ const productsNavigationConfig: NavigationTree[] = [
     {
         key: 'products',
         path: '',
-        title: 'Products',
-        translateKey: 'Products',
+        title: 'Productos',
+        translateKey: 'Productos',
         icon: 'PiPackageDuotone',
         type: NAV_ITEM_TYPE_TITLE,
         authority: [ADMIN, USER],
@@ -22,17 +22,33 @@ const productsNavigationConfig: NavigationTree[] = [
         },
         subMenu: [
             {
+                key: 'products.list',
+                path: '/products',
+                title: 'Todos los Productos',
+                translateKey: 'Todos los Productos',
+                icon: 'PiPackageDuotone',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [ADMIN, USER],
+                meta: {
+                    description: {
+                        translateKey: 'nav.products.listDesc',
+                        label: 'Explorar y buscar productos',
+                    },
+                },
+                subMenu: [],
+            },
+            {
                 key: 'products.admin',
                 path: '/products/admin',
-                title: 'Manage Products',
-                translateKey: 'Manage Products',
+                title: 'Administrar Productos',
+                translateKey: 'Administrar Productos',
                 icon: 'PiPackageDuotone',
                 type: NAV_ITEM_TYPE_ITEM,
                 authority: [ADMIN],
                 meta: {
                     description: {
                         translateKey: 'nav.products.adminDesc',
-                        label: 'Create and edit products',
+                        label: 'Crear y editar productos',
                     },
                 },
                 subMenu: [],

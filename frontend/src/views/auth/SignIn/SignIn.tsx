@@ -1,4 +1,4 @@
-import Logo from '@/components/template/Logo'
+import { TbLogin, TbUserCheck } from 'react-icons/tb'
 import Alert from '@/components/ui/Alert'
 import SignInForm from './components/SignInForm'
 import OauthSignIn from './components/OauthSignIn'
@@ -23,18 +23,13 @@ export const SignInBase = ({
 
     return (
         <>
-            <div className="mb-8">
-                <Logo
-                    type="streamline"
-                    mode={mode}
-                    imgClass="mx-auto"
-                    logoWidth={60}
-                />
-            </div>
-            <div className="mb-10">
-                <h2 className="mb-2">Welcome back!</h2>
-                <p className="font-semibold heading-text">
-                    Please enter your credentials to sign in!
+            <div className="mb-8 text-center">
+                <div className="flex items-center justify-center mb-4">
+                    <TbLogin className="w-12 h-12 text-black mr-3" />
+                    <h2 className="text-2xl font-bold text-black">Bienvenido</h2>
+                </div>
+                <p className="text-black font-semibold">
+                    Ingresa tus credenciales para iniciar sesión
                 </p>
             </div>
             {message && (
@@ -49,32 +44,32 @@ export const SignInBase = ({
                     <div className="mb-7 mt-2">
                         <ActionLink
                             to={forgetPasswordUrl}
-                            className="font-semibold heading-text mt-2 underline"
+                            className="font-semibold text-black underline"
                             themeColor={false}
                         >
-                            Forgot password
+                            ¿Olvidaste tu contraseña?
                         </ActionLink>
                     </div>
                 }
             />
             <div className="mt-8">
                 <div className="flex items-center gap-2 mb-6">
-                    <div className="border-t border-gray-200 dark:border-gray-800 flex-1 mt-[1px]" />
-                    <p className="font-semibold heading-text">
-                        or countinue with
+                    <div className="border-t border-black flex-1 mt-[1px]" />
+                    <p className="font-semibold text-black">
+                        o continúa con
                     </p>
-                    <div className="border-t border-gray-200 dark:border-gray-800 flex-1 mt-[1px]" />
+                    <div className="border-t border-black flex-1 mt-[1px]" />
                 </div>
             </div>
             <div>
                 <div className="mt-6 text-center">
-                    <span>{`Don't have an account yet?`} </span>
+                    <span className="text-black">¿No tienes una cuenta aún? </span>
                     <ActionLink
                         to={signUpUrl}
-                        className="heading-text font-bold"
+                        className="text-black font-bold"
                         themeColor={false}
                     >
-                        Sign up
+                        Regístrate
                     </ActionLink>
                 </div>
             </div>

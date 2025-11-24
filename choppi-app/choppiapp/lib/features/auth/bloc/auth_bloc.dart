@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import '../data/repositories/auth_repository.dart';
+import '../data/services/auth_service.dart';
 
 // Estados del AuthBloc
 abstract class AuthState extends Equatable {
@@ -25,11 +26,13 @@ class AuthAuthenticated extends AuthState {
 
 class AuthError extends AuthState {
   final String message;
+  final String? error;
+  final int? statusCode;
 
-  const AuthError(this.message);
+  const AuthError(this.message, {this.error, this.statusCode});
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [message, error ?? '', statusCode ?? 0];
 }
 
 // Eventos del AuthBloc (aunque usamos Cubit, podemos definir eventos para claridad)
@@ -56,7 +59,16 @@ class AuthBloc extends Cubit<AuthState> {
       final token = await _authRepository.login(email, password);
       emit(AuthAuthenticated(token));
     } catch (e) {
-      emit(AuthError(e.toString()));
+      // Mejorar el manejo de AuthException
+      if (e is AuthException) {
+        emit(AuthError(
+          e.userFriendlyMessage,
+          error: e.error,
+          statusCode: e.statusCode,
+        ));
+      } else {
+        emit(AuthError(e.toString()));
+      }
     }
   }
 

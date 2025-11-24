@@ -42,11 +42,11 @@ const ProductDetail = () => {
         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <TbPackage className="w-8 h-8 text-gray-400" />
         </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">Product not found</h3>
-        <p className="text-gray-500 mb-4">The product you're looking for doesn't exist or has been removed.</p>
+        <h3 className="text-lg font-medium text-gray-900 mb-2">Producto no encontrado</h3>
+        <p className="text-gray-500 mb-4">El producto que buscas no existe o ha sido eliminado.</p>
         <Button onClick={() => navigate('/stores')}>
           <TbArrowLeft className="w-4 h-4 mr-2" />
-          Back to Stores
+          Volver a Tiendas
         </Button>
       </div>
     )
@@ -55,18 +55,18 @@ const ProductDetail = () => {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-t-xl mb-6">
+      <div className="bg-[#FAA531] p-4 rounded-t-xl mb-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <TbPackage className="w-6 h-6 text-white mr-3" />
-            <h4 className="text-lg font-semibold text-white">{currentProduct.name}</h4>
+            <TbPackage className="w-6 h-6 text-[#111827] mr-3" />
+            <h4 className="text-lg font-semibold text-[#111827]">{currentProduct.name}</h4>
           </div>
           <Button
             onClick={() => navigate('/stores')}
-            className="bg-white/10 hover:bg-white/20 text-white border-white/20"
+            className="bg-white/10 hover:bg-white/20 text-[#111827] border-white/20"
           >
             <TbArrowLeft className="w-4 h-4 mr-2" />
-            Back to Stores
+            Volver a Tiendas
           </Button>
         </div>
       </div>
@@ -93,18 +93,18 @@ const ProductDetail = () => {
             {/* Details */}
             <div className="space-y-4">
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Product Information</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Información del Producto</h3>
                 <div className="space-y-3">
                   <div className="flex items-center">
                     <TbTag className="w-5 h-5 text-gray-400 mr-3" />
-                    <span className="text-sm text-gray-600">Name:</span>
+                    <span className="text-sm text-gray-600">Nombre:</span>
                     <span className="ml-2 font-medium">{currentProduct.name}</span>
                   </div>
 
                   {currentProduct.description && (
                     <div className="flex items-start">
                       <TbPackage className="w-5 h-5 text-gray-400 mr-3 mt-0.5" />
-                      <span className="text-sm text-gray-600">Description:</span>
+                      <span className="text-sm text-gray-600">Descripción:</span>
                       <span className="ml-2">{currentProduct.description}</span>
                     </div>
                   )}
@@ -112,7 +112,7 @@ const ProductDetail = () => {
                   {currentProduct.category && (
                     <div className="flex items-center">
                       <TbCategory className="w-5 h-5 text-gray-400 mr-3" />
-                      <span className="text-sm text-gray-600">Category:</span>
+                      <span className="text-sm text-gray-600">Categoría:</span>
                       <span className="ml-2 font-medium">{currentProduct.category}</span>
                     </div>
                   )}
@@ -120,20 +120,20 @@ const ProductDetail = () => {
                   {currentProduct.basePrice && !isNaN(Number(currentProduct.basePrice)) && (
                     <div className="flex items-center">
                       <TbTag className="w-5 h-5 text-gray-400 mr-3" />
-                      <span className="text-sm text-gray-600">Base Price:</span>
+                      <span className="text-sm text-gray-600">Precio Base:</span>
                       <span className="ml-2 font-medium text-green-600">${Number(currentProduct.basePrice).toFixed(2)}</span>
                     </div>
                   )}
 
                   <div className="flex items-center">
                     <TbCalendar className="w-5 h-5 text-gray-400 mr-3" />
-                    <span className="text-sm text-gray-600">Created:</span>
+                    <span className="text-sm text-gray-600">Creado:</span>
                     <span className="ml-2">{new Date(currentProduct.createdAt).toLocaleDateString()}</span>
                   </div>
 
                   <div className="flex items-center">
                     <TbCalendar className="w-5 h-5 text-gray-400 mr-3" />
-                    <span className="text-sm text-gray-600">Last Updated:</span>
+                    <span className="text-sm text-gray-600">Última Actualización:</span>
                     <span className="ml-2">{new Date(currentProduct.updatedAt).toLocaleDateString()}</span>
                   </div>
                 </div>

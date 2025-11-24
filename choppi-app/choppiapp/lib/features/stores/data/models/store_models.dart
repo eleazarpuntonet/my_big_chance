@@ -59,12 +59,27 @@ class StoreProduct {
   });
 
   factory StoreProduct.fromJson(Map<String, dynamic> json) {
+    // Función helper para conversión segura
+    double _toDouble(dynamic value) {
+      if (value is double) return value;
+      if (value is int) return value.toDouble();
+      if (value is String) return double.tryParse(value) ?? 0.0;
+      return 0.0;
+    }
+
+    int _toInt(dynamic value) {
+      if (value is int) return value;
+      if (value is double) return value.toInt();
+      if (value is String) return int.tryParse(value) ?? 0;
+      return 0;
+    }
+
     return StoreProduct(
       id: json['id'],
       storeId: json['storeId'],
       productId: json['productId'],
-      price: (json['price'] as num).toDouble(),
-      stock: json['stock'],
+      price: _toDouble(json['price']),
+      stock: _toInt(json['stock']),
       isActive: json['isActive'] ?? true,
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
@@ -94,11 +109,18 @@ class Product {
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
+    double _toDouble(dynamic value) {
+      if (value is double) return value;
+      if (value is int) return value.toDouble();
+      if (value is String) return double.tryParse(value) ?? 0.0;
+      return 0.0;
+    }
+
     return Product(
       id: json['id'],
       name: json['name'],
       description: json['description'],
-      basePrice: json['basePrice'] != null ? (json['basePrice'] as num).toDouble() : null,
+      basePrice: json['basePrice'] != null ? _toDouble(json['basePrice']) : null,
       category: json['category'],
       imageUrl: json['imageUrl'],
       isActive: json['isActive'] ?? true,
@@ -121,11 +143,18 @@ class StoresResponse {
   });
 
   factory StoresResponse.fromJson(Map<String, dynamic> json) {
+    int _toInt(dynamic value) {
+      if (value is int) return value;
+      if (value is double) return value.toInt();
+      if (value is String) return int.tryParse(value) ?? 0;
+      return 0;
+    }
+
     return StoresResponse(
       data: (json['data'] as List).map((item) => Store.fromJson(item)).toList(),
-      total: json['total'],
-      page: json['page'],
-      limit: json['limit'],
+      total: _toInt(json['total']),
+      page: _toInt(json['page']),
+      limit: _toInt(json['limit']),
     );
   }
 }
@@ -145,11 +174,18 @@ class StoreProductsResponse {
   });
 
   factory StoreProductsResponse.fromJson(Map<String, dynamic> json) {
+    int _toInt(dynamic value) {
+      if (value is int) return value;
+      if (value is double) return value.toInt();
+      if (value is String) return int.tryParse(value) ?? 0;
+      return 0;
+    }
+
     return StoreProductsResponse(
       data: (json['data'] as List).map((item) => StoreProduct.fromJson(item)).toList(),
-      total: json['total'],
-      page: json['page'],
-      limit: json['limit'],
+      total: _toInt(json['total']),
+      page: _toInt(json['page']),
+      limit: _toInt(json['limit']),
     );
   }
 }

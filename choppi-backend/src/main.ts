@@ -16,11 +16,15 @@ async function bootstrap() {
     transform: true,
   }));
 
+  // Set global prefix for all routes FIRST
+  app.setGlobalPrefix('api');
+
   // Configure Swagger
   const config = new DocumentBuilder()
     .setTitle('Choppi API')
     .setDescription('API for Choppi full-stack application')
     .setVersion('1.0')
+    .addServer('http://localhost:3000', 'Development server')
     .addTag('auth', 'Authentication endpoints')
     .addTag('stores', 'Store management endpoints')
     .addTag('products', 'Product catalog endpoints')
@@ -47,9 +51,6 @@ async function bootstrap() {
     ],
   };
   SwaggerModule.setup('api', app, document, options);
-
-  // Set global prefix for all routes
-  app.setGlobalPrefix('api');
 
   await app.listen(process.env.PORT ?? 3000);
   console.log(`Application is running on: http://localhost:${process.env.PORT ?? 3000}`);

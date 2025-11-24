@@ -1,273 +1,273 @@
-# AI Coding Assistant Instructions
+# Instrucciones para Asistente de Codificación AI
 
-## Architecture Overview
+## Resumen de Arquitectura
 
-This is a full-stack e-commerce application with **NestJS backend architecture** implementing a store-product catalog system:
-- **Backend**: NestJS (TypeScript) in `choppi-backend/` with TypeORM entities, JWT authentication, and Swagger API docs
-- **Data Model**: User/Store/Product/StoreProduct entities with many-to-many store-product relationships via junction table
-- **Frontend Options**: Next.js (App Router) in `frontend/` or Flutter (Bloc/Cubit) in `flutter/` (currently minimal implementations)
-- **Infrastructure**: PostgreSQL with Docker Compose, environment-based configuration in `.envs/` directory
+Esta es una aplicación de comercio electrónico full-stack con **arquitectura backend NestJS** implementando un sistema de catálogo tienda-producto:
+- **Backend**: NestJS (TypeScript) en `choppi-backend/` con entidades TypeORM, autenticación JWT, y documentación API Swagger
+- **Modelo de Datos**: Entidades Usuario/Tienda/Producto/ProductoTienda con relaciones muchos-a-muchos tienda-producto a través de tabla de unión
+- **Opciones Frontend**: Next.js (HashRouter) en `frontend/` o Flutter (Bloc/Cubit) en `choppi-app/` (ambos implementados)
+- **Infraestructura**: PostgreSQL con Docker Compose, configuración basada en entorno en directorio `.envs/`
 
-## Critical Workflows
+## Flujos de Trabajo Críticos
 
-### Local Development Setup
+### Configuración de Desarrollo Local
 ```bash
-# From project root - starts all services with hot reload
+# Desde la raíz del proyecto - inicia todos los servicios con recarga en caliente
 docker compose up --build
 
-# Services endpoints (development):
+# Endpoints de servicios (desarrollo):
 # - Backend (NestJS): http://localhost:3000 (Swagger: /api)
 # - Frontend (Next.js): http://localhost:5000
-# - PostgreSQL: localhost:8832 (internal only)
-# - Flutter: localhost:8080 (for development)
+# - PostgreSQL: localhost:8832 (solo interno)
+# - Flutter: localhost:8080 (para desarrollo)
 ```
 
-### Production Setup with Traefik
+### Configuración de Producción con Traefik
 ```bash
-# Production with Traefik routing
+# Producción con enrutamiento Traefik
 docker compose -f docker-compose.production.yml up --build
 
-# Services endpoints (production via Traefik):
+# Endpoints de servicios (producción vía Traefik):
 # - Frontend: http://172.31.75.75/app
-# - Backend API: http://172.31.75.75/api (Swagger: /api)
-# - Traefik: http://172.31.75.75 (port 80)
-# - PostgreSQL: Internal only, not exposed
+# - API Backend: http://172.31.75.75/api (Swagger: /api)
+# - Traefik: http://172.31.75.75 (puerto 80)
+# - PostgreSQL: Solo interno, no expuesto
 ```
 
-### Traefik Routing
-Traefik handles routing based on host and path prefixes:
+### Enrutamiento Traefik
+Traefik maneja el enrutamiento basado en host y prefijos de ruta:
 - `Host(172.31.75.75) && PathPrefix(/app)` → nginx_frontend
 - `Host(172.31.75.75) && PathPrefix(/api)` → nginx_backend
 
-### Database Operations
+### Operaciones de Base de Datos
 ```bash
-# Seed database with sample data (3 stores, 20 products, store-product associations)
+# Sembrar base de datos con datos de muestra (3 tiendas, 20 productos, asociaciones tienda-producto)
 cd choppi-backend && npm run seed
 
-# Database connection via environment variables (see .envs/.local/.backend)
-# TypeORM sync enabled in development, migrations required for production
+# Conexión a base de datos vía variables de entorno (ver .envs/.local/.backend)
+# Sincronización TypeORM habilitada en desarrollo, migraciones requeridas en producción
 ```
 
-### Authentication Flow
-- JWT-based auth protecting POST/PUT/DELETE operations
-- Register/Login endpoints return `{ access_token: string }`
-- Bearer token required in `Authorization: Bearer <token>` header
-- User entity with email/password (bcrypt hashed)
+### Flujo de Autenticación
+- Autenticación basada en JWT protegiendo operaciones POST/PUT/DELETE
+- Endpoints de registro/login retornan `{ access_token: string }`
+- Token Bearer requerido en header `Authorization: Bearer <token>`
+- Entidad usuario con email/contraseña (hasheada con bcrypt)
 
-## Project-Specific Patterns
+## Patrones Específicos del Proyecto
 
-### Backend Implementation (NestJS/TypeORM)
-- **Required APIs** (from README.md):
-  - Auth: JWT-based login protecting POST/PUT/DELETE
-  - Stores: CRUD with pagination, search (`?q=` param)
-  - Products: Global catalog (GET /products/:id, POST /products)
-  - StoreProducts: Per-store inventory (price, stock) with filters (`?q=`, `?inStock=true`)
+### Implementación Backend (NestJS/TypeORM)
+- **APIs Requeridas** (del README.md):
+  - Auth: Login JWT protegiendo POST/PUT/DELETE
+  - Stores: CRUD con paginación, búsqueda (`?q=` param)
+  - Products: Catálogo global (GET /products/:id, POST /products)
+  - StoreProducts: Inventario por tienda (precio, stock) con filtros (`?q=`, `?inStock=true`)
 
-#### Entity Patterns
-- **UUID Primary Keys**: All entities use `@PrimaryGeneratedColumn('uuid')`
-- **Soft Deletes**: Use `isActive: boolean` field instead of hard deletes
-- **Timestamps**: `@CreateDateColumn()` and `@UpdateDateColumn()` on all entities
-- **Relations**: Explicit `@OneToMany`/`@ManyToOne` decorators for navigation
+#### Patrones de Entidades
+- **Claves Primarias UUID**: Todas las entidades usan `@PrimaryGeneratedColumn('uuid')`
+- **Eliminaciones Suaves**: Usar campo `isActive: boolean` en lugar de eliminaciones duras
+- **Timestamps**: `@CreateDateColumn()` y `@UpdateDateColumn()` en todas las entidades
+- **Relaciones**: Decoradores `@OneToMany`/`@ManyToOne` explícitos para navegación
 
-#### API Patterns
-- **Pagination**: Required for all list endpoints (`?page=1&limit=10`)
-- **Search**: ILIKE queries with `?q=` parameter for case-insensitive name search
-- **Filtering**: Boolean filters like `?inStock=true` for store products
-- **Validation**: `class-validator` with `whitelist: true, forbidNonWhitelisted: true`
-- **Error Handling**: Consistent NestJS exceptions (`NotFoundException`, `BadRequestException`, etc.)
+#### Patrones de API
+- **Paginación**: Requerida para todos los endpoints de lista (`?page=1&limit=10`)
+- **Búsqueda**: Consultas ILIKE con parámetro `?q=` para búsqueda insensible a mayúsculas
+- **Filtrado**: Filtros booleanos como `?inStock=true` para productos de tienda
+- **Validación**: `class-validator` con `whitelist: true, forbidNonWhitelisted: true`
+- **Manejo de Errores**: Excepciones consistentes de NestJS (`NotFoundException`, `BadRequestException`, etc.)
 
-#### Service Patterns
+#### Patrones de Servicio
 ```typescript
-// QueryBuilder for complex queries with joins
+// QueryBuilder para consultas complejas con joins
 const queryBuilder = this.storeProductRepository
   .createQueryBuilder('storeProduct')
   .leftJoinAndSelect('storeProduct.product', 'product')
   .where('storeProduct.storeId = :storeId', { storeId });
 
-// Pagination response format
+// Formato de respuesta de paginación
 return { data, total, page, limit };
 ```
 
-### Docker Workflow
-- **Development**: Hot reload enabled, volumes mounted for live editing
-- **Production**: Multi-stage builds, non-root users, compiled assets
+### Flujo de Trabajo Docker
+- **Desarrollo**: Recarga en caliente habilitada, volúmenes montados para edición en vivo
+- **Producción**: Builds multi-etapa, usuarios no-root, assets compilados
 
-#### Controller Patterns
+#### Patrones de Controlador
 ```typescript
-// Auth-protected routes use @UseGuards(JwtAuthGuard)
+// Rutas protegidas por auth usan @UseGuards(JwtAuthGuard)
 @Post()
 @UseGuards(JwtAuthGuard)
 async create(@Body() dto: CreateDto) { ... }
 
-// Query parameters with validation
+// Parámetros de consulta con validación
 async findAll(@Query() query: GetQueryDto) { ... }
 ```
 
-### Data Seeding Pattern
-- Standalone seed script (`seed.ts`) using NestFactory application context
-- Creates stores → products → store-product associations with randomized pricing/stock
-- Price variation: ±20% from base price, stock: 0-50 units
+### Patrón de Siembra de Datos
+- Script de siembra independiente (`seed.ts`) usando contexto de aplicación NestFactory
+- Crea tiendas → productos → asociaciones tienda-producto con precios/stock aleatorios
+- Variación de precio: ±20% del precio base, stock: 0-50 unidades
 
-### Frontend Implementation (Next.js)
-- **App Router**: Uses Next.js 13+ App Router structure
-- **Styling**: Tailwind CSS with PostCSS
-- **State Management**: Zustand for global state
-- **API Calls**: Axios with SWR for data fetching
-- **Forms**: React Hook Form with Zod validation
+### Implementación Frontend (Next.js)
+- **HashRouter**: Usa React Router con HashRouter para enrutamiento del lado cliente
+- **Estilos**: Tailwind CSS con PostCSS
+- **Gestión de Estado**: Zustand para estado global
+- **Llamadas API**: Axios a través de capa ApiService (no SWR)
+- **Formularios**: React Hook Form con patrón Controller
 
-#### Feature-Based Architecture
-All frontend modules must follow this feature-based architecture for maintainability and scalability:
+#### Arquitectura Basada en Características
+Todos los módulos frontend deben seguir esta arquitectura basada en características para mantenibilidad y escalabilidad:
 
-##### Module Structure
+##### Estructura de Módulo
 ```
 src/views/[module]/
-├── views/              # Page components (Next.js pages)
-├── components/         # UI components specific to this module
-├── store/              # Zustand stores for global state management
-├── hooks/              # Reusable custom hooks
-├── repositories/       # Data access layer (API calls, local storage)
-├── services/           # Business logic layer (data transformation, validation)
-└── types/              # TypeScript types/interfaces for this module
+├── views/              # Componentes de página (páginas Next.js)
+├── components/         # Componentes UI específicos de este módulo
+├── store/              # Stores Zustand para gestión de estado global
+├── hooks/              # Hooks personalizados reutilizables
+├── repositories/       # Capa de acceso a datos (llamadas API, almacenamiento local)
+├── services/           # Capa de lógica de negocio (transformación de datos, validación)
+└── types/              # Tipos/interfaces TypeScript para este módulo
 ```
 
-##### Data Flow
-- **Global State**: All data flows through Zustand stores for cross-component communication
-- **Actions**: Store actions can be used across different components and views
-- **Typing**: Strongly typed with TypeScript, synchronized with backend types
-- **Synchronization**: Frontend types must match backend DTOs exactly
+##### Flujo de Datos
+- **Estado Global**: Todos los datos fluyen a través de stores Zustand para comunicación entre componentes
+- **Acciones**: Las acciones del store pueden usarse en diferentes componentes y vistas
+- **Tipado**: Fuertemente tipado con TypeScript, sincronizado con tipos del backend
+- **Sincronización**: Los tipos del frontend deben coincidir exactamente con los DTOs del backend
 
-##### Module Creation Workflow
-1. **Define Types**: Create types/interfaces matching backend DTOs
-2. **Implement Repository**: Create API calls with proper typing
-3. **Create Service**: Business logic layer calling repositories
-4. **Configure Store**: Zustand store with actions and state
-5. **Build Components**: Reusable components following ECME template
-6. **Create Views**: Page components using components and store
-7. **Add Routing**: Configure Next.js App Router routes
+##### Flujo de Creación de Módulo
+1. **Definir Tipos**: Crear tipos/interfaces coincidiendo con DTOs del backend
+2. **Implementar Repositorio**: Crear llamadas API con tipado apropiado
+3. **Crear Servicio**: Capa de lógica de negocio llamando repositorios
+4. **Configurar Store**: Store Zustand con acciones y estado
+5. **Construir Componentes**: Componentes reutilizables siguiendo plantilla ECME
+6. **Crear Vistas**: Componentes de página usando componentes y store
+7. **Agregar Enrutamiento**: Configurar rutas de Next.js App Router
 
-#### Frontend Structure
-- **File Structure**: Feature-based in `views/`, shared components in `components/`
-- **TypeScript**: Strict typing with custom `@types/`
-- **Imports**: Path aliases with `@/` prefix
-- **State**: Immutable updates with Zustand
+#### Estructura Frontend
+- **Estructura de Archivos**: Basada en características en `views/`, componentes compartidos en `components/`
+- **TypeScript**: Tipado estricto con `@types/` personalizados
+- **Imports**: Alias de rutas con prefijo `@/`
+- **Estado**: Actualizaciones inmutables con Zustand
 
-#### Naming Conventions
-- **Files**: kebab-case for directories, PascalCase for components
-- **Variables**: camelCase, PascalCase for types/interfaces
-- **Database**: snake_case for columns, PascalCase for entities
-- **API**: RESTful endpoints with consistent naming
+#### Convenciones de Nomenclatura
+- **Archivos**: kebab-case para directorios, PascalCase para componentes
+- **Variables**: camelCase, PascalCase para tipos/interfaces
+- **Base de Datos**: snake_case para columnas, PascalCase para entidades
+- **API**: Endpoints RESTful con nomenclatura consistente
 
-#### Modern Headers with Gradients
-All main headers must follow this modern pattern:
+#### Headers Modernos con Gradientes
+Todos los headers principales deben seguir este patrón moderno:
 ```tsx
 <div className="bg-gradient-to-r from-[color1]-500 to-[color2]-600 p-4 rounded-t-xl">
   <div className="flex items-center justify-between">
     <div className="flex items-center">
       <TbIcon className="w-6 h-6 text-white mr-3" />
-      <h4 className="text-lg font-semibold text-white">Header Title</h4>
+      <h4 className="text-lg font-semibold text-white">Título del Header</h4>
     </div>
     <div className="flex items-center space-x-4">
-      {/* Statistics in backdrop-blur */}
+      {/* Estadísticas en backdrop-blur */}
       <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
         <div className="text-3xl font-bold mb-1">{value}</div>
-        <div className="text-[color1]-100 text-sm">Label</div>
+        <div className="text-[color1]-100 text-sm">Etiqueta</div>
       </div>
     </div>
   </div>
 </div>
 ```
 
-#### Modern Cards
-Cards must use this consistent design:
+#### Cards Modernas
+Las cards deben usar este diseño consistente:
 ```tsx
 <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-  {/* Header with gradient */}
+  {/* Header con gradiente */}
   <div className="bg-gradient-to-r from-[color]-500 to-[color]-600 p-4">
     <div className="flex items-center">
       <TbIcon className="w-6 h-6 text-white mr-3" />
-      <h4 className="text-lg font-semibold text-white">Card Title</h4>
+      <h4 className="text-lg font-semibold text-white">Título de la Card</h4>
     </div>
   </div>
-  {/* Content */}
+  {/* Contenido */}
   <div className="p-6">
-    {/* Specific content */}
+    {/* Contenido específico */}
   </div>
 </div>
 ```
 
-#### Iconography
-- **Required Library**: `react-icons/tb` (Tabler Icons)
-- **Syntax**: `import { TbIconName } from 'react-icons/tb'`
-- **Sizes**: `w-6 h-6` for headers, `w-5 h-5` for secondary elements
-- **Colors**: White in gradient headers, thematic colors in content
+#### Iconografía
+- **Biblioteca Requerida**: `react-icons/tb` (Iconos Tabler)
+- **Sintaxis**: `import { TbIconName } from 'react-icons/tb'`
+- **Tamaños**: `w-6 h-6` para headers, `w-5 h-5` para elementos secundarios
+- **Colores**: Blanco en headers con gradiente, colores temáticos en contenido
 
-#### Typography
-- **Main Headers**: `text-lg font-semibold`
-- **Form Labels**: `text-sm font-medium text-gray-700`
-- **Secondary Text**: `text-xs text-gray-500`
-- **Highlighted Values**: `text-3xl font-bold` for large numbers
+#### Tipografía
+- **Headers Principales**: `text-lg font-semibold`
+- **Etiquetas de Formulario**: `text-sm font-medium text-gray-700`
+- **Texto Secundario**: `text-xs text-gray-500`
+- **Valores Destacados**: `text-3xl font-bold` para números grandes
 
-#### Visual Effects
-- **Backdrop Blur**: `bg-white/10 backdrop-blur-sm` for overlays
-- **Transitions**: `transition-all` for hover states
-- **Gradients**: `bg-gradient-to-r` for attractive backgrounds
-- **Shadows**: `shadow-lg` for depth
+#### Efectos Visuales
+- **Backdrop Blur**: `bg-white/10 backdrop-blur-sm` para overlays
+- **Transiciones**: `transition-all` para estados hover
+- **Gradientes**: `bg-gradient-to-r` para fondos atractivos
+- **Sombras**: `shadow-lg` para profundidad
 
-#### Form Structure
-All application forms must follow this standard structure for consistency and quality:
+#### Estructura de Formularios
+Todos los formularios de la aplicación deben seguir esta estructura estándar para consistencia y calidad:
 
 ##### 1. Imports
 ```typescript
 import React from 'react'
 import { Button, Form, FormItem, Input, Select } from '@/components/ui'
 import { Controller, useForm } from 'react-hook-form'
-import { useStore } from '../store/useStore' // Corresponding Zustand store
-import { QueryType } from '../types' // Module types
+import { useStore } from '../store/useStore' // Store Zustand correspondiente
+import { QueryType } from '../types' // Tipos del módulo
 import ButtonGroup from '@/components/ui/ButtonGroup'
-import { Iconos } from 'react-icons/tb' // Tabler icons
+import { TbIconName } from 'react-icons/tb' // Iconos Tabler
 ```
 
-##### 2. Props Interface
+##### 2. Interfaz de Props
 ```typescript
 interface FormComponentProps {
   onSubmit: (data: FormData) => void
   onClear?: () => void
-  // Other component-specific props
+  // Otras props específicas del componente
 }
 ```
 
-##### 3. Functional Component with Typing
+##### 3. Componente Funcional con Tipado
 ```typescript
 const FormComponent: React.FC<FormComponentProps> = ({
   onSubmit,
   onClear
 }) => {
-  // Hooks and logic here
+  // Hooks y lógica aquí
 }
 ```
 
-##### 4. Hook Usage
-- **React Hook Form**: `useForm<FormDataType>()` for form handling
-- **Zustand Store**: For global state and synchronization with other components
-- **Watch/Control**: To observe changes in specific fields
+##### 4. Uso de Hooks
+- **React Hook Form**: `useForm<FormDataType>()` para manejo de formularios
+- **Store Zustand**: Para estado global y sincronización con otros componentes
+- **Watch/Control**: Para observar cambios en campos específicos
 
-##### 5. Handler Functions
+##### 5. Funciones Handler
 ```typescript
 const onSubmit = (data: FormDataType) => {
-  // Submission logic
+  // Lógica de envío
 }
 
 const handleFieldChange = (value: any) => {
-  // Field-specific logic
+  // Lógica específica del campo
 }
 
 const handleClear = () => {
-  reset() // Form reset
-  onClear?.() // Optional callback
+  reset() // Reset del formulario
+  onClear?.() // Callback opcional
 }
 ```
 
-##### 6. JSX Structure
+##### 6. Estructura JSX
 ```tsx
 <div className="mb-6 bg-white p-4 rounded-lg shadow">
   <div className="flex flex-row">
@@ -277,8 +277,8 @@ const handleClear = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className='flex flex-row gap-1'>
-        {/* Form fields */}
-        <FormItem label="Label">
+        {/* Campos del formulario */}
+        <FormItem label="Etiqueta">
           <Controller
             name="fieldName"
             control={control}
@@ -301,7 +301,7 @@ const handleClear = () => {
             icon={<TbIcon />}
             className="px-3 py-1 bg-blue-600 text-white hover:bg-blue-700"
           >
-            Action
+            Acción
           </Button>
           <Button
             type='button'
@@ -310,7 +310,7 @@ const handleClear = () => {
             onClick={handleClear}
             className="px-3 py-1 bg-blue-600 text-white hover:bg-blue-700"
           >
-            Clear
+            Limpiar
           </Button>
         </ButtonGroup>
       </div>
@@ -319,19 +319,19 @@ const handleClear = () => {
 </div>
 ```
 
-##### 7. Mandatory Patterns
-- **React Hook Form**: Always use for form handling
-- **Controller Pattern**: Use RHF Controller for all fields
-- **Zustand Integration**: Integrate with Zustand stores for global state
-- **TypeScript**: Strong typing in all interfaces and functions
-- **UI Components**: Use only ECME template components
-- **Icons**: Always use react-icons/tb (Tabler icons)
-- **ButtonGroup**: Group action buttons in ButtonGroup
-- **Styles**: Use consistent Tailwind classes
-- **Layout**: Flex row with fields on left and buttons on right
+##### 7. Patrones Obligatorios
+- **React Hook Form**: Siempre usar para manejo de formularios
+- **Patrón Controller**: Usar Controller de RHF para todos los campos
+- **Integración Zustand**: Integrar con stores Zustand para estado global
+- **TypeScript**: Tipado fuerte en todas las interfaces y funciones
+- **Componentes UI**: Usar solo componentes de plantilla ECME
+- **Iconos**: Siempre usar react-icons/tb (iconos Tabler)
+- **ButtonGroup**: Agrupar botones de acción en ButtonGroup
+- **Estilos**: Usar clases Tailwind consistentes
+- **Layout**: Flex row con campos a la izquierda y botones a la derecha
 
-#### Parameter Stores and Cascading Filters
-##### 1. Parameter Store
+#### Stores de Parámetros y Filtros en Cascada
+##### 1. Store de Parámetros
 ```typescript
 // src/store/parametersStore.ts
 import { create } from 'zustand'
@@ -341,17 +341,17 @@ interface ParametersState {
   states: State[]
   loadingStates: boolean
   fetchStates: () => Promise<void>
-  // ... other states and actions
+  // ... otros estados y acciones
 }
 
 export const useParametersStore = create<ParametersState>((set) => ({
-  // Store implementation
+  // Implementación del store
 }))
 ```
 
-##### 2. Cascading Filtering
+##### 2. Filtrado en Cascada
 ```tsx
-// In form component
+// En componente de formulario
 const selectedStateId = watch('stateId')
 const selectedMunicipalityId = watch('municipalityId')
 
@@ -364,14 +364,14 @@ useEffect(() => {
 }, [selectedStateId])
 ```
 
-##### 3. Select Component with Options
+##### 3. Componente Select con Opciones
 ```tsx
 <Controller
   name="stateId"
   control={control}
   render={({ field }) => {
     const options = states.map(state => ({
-      label: state.description || `State ${state.id}`,
+      label: state.description || `Estado ${state.id}`,
       value: state.id
     }))
     const selectedValue = options.find(option => option.value === field.value)
@@ -381,93 +381,93 @@ useEffect(() => {
         options={options}
         value={selectedValue}
         onChange={(selectedOption) => field.onChange(selectedOption?.value)}
-        placeholder="Select a state"
+        placeholder="Seleccionar un estado"
       />
     )
   }}
 />
 ```
 
-##### 4. Loading States
-- Show informative placeholders during loading
-- Disable dependent selects until parent is selected
-- Indicate "First select X" for dependent selects
+##### 4. Estados de Carga
+- Mostrar placeholders informativos durante la carga
+- Deshabilitar selects dependientes hasta que el padre esté seleccionado
+- Indicar "Primero seleccionar X" para selects dependientes
 
-#### Complex Form Architecture
-Complex forms with system parameters follow this multi-layer structure:
+#### Arquitectura de Formularios Complejos
+Los formularios complejos con parámetros del sistema siguen esta estructura multi-capa:
 
-##### 1. Main View (`CreateCustomer.tsx`)
-- Layout with Card and action header
-- Global state handling and navigation
-- Toast notifications
-- HelpButton for documentation
+##### 1. Vista Principal (`CreateCustomer.tsx`)
+- Layout con Card y header de acciones
+- Manejo de estado global y navegación
+- Notificaciones toast
+- Botón HelpButton para documentación
 
-##### 2. Form Component (`CreateCustomerForm.tsx`)
-- Fields organized in responsive grid
-- React Hook Form integration
-- Selects with parameter data
-- Cascading filter logic
+##### 2. Componente de Formulario (`CreateCustomerForm.tsx`)
+- Campos organizados en grid responsivo
+- Integración React Hook Form
+- Selects con datos de parámetros
+- Lógica de filtro en cascada
 
-#### Loading States and Dynamic Placeholders
+#### Estados de Carga y Placeholders Dinámicos
 ```tsx
 <Select
   placeholder={
     !selectedStateId
-      ? "First select a state"
+      ? "Primero seleccionar un estado"
       : loadingMunicipalities
-        ? "Loading municipalities..."
-        : "Select a municipality"
+        ? "Cargando municipios..."
+        : "Seleccionar un municipio"
   }
   disabled={!selectedStateId || loadingMunicipalities}
 />
 ```
 
-#### Complete Implementation Example
-See `src/views/customers/components/CreateCustomerForm.tsx` and `src/views/customers/views/CreateCustomer.tsx` as complete implementation reference.
+#### Ejemplo de Implementación Completa
+Ver `src/views/customers/components/CreateCustomerForm.tsx` y `src/views/customers/views/CreateCustomer.tsx` como referencia de implementación completa.
 
-#### Submit Pattern and API Request
+#### Patrón de Envío y Solicitud API
 
-All forms must follow this standard structure for data submission handling:
+Todos los formularios deben seguir esta estructura estándar para manejo de envío de datos:
 
-##### Main View (`CreateCustomer.tsx`)
-- **Responsibilities**: Layout, navigation, global state handling, notifications
-- **Imports**: Zustand store, UI components, navigation
-- **Structure**:
-  - Header with title and action buttons
-  - Form component
-  - Help button (HelpButton)
+##### Vista Principal (`CreateCustomer.tsx`)
+- **Responsabilidades**: Layout, navegación, manejo de estado global, notificaciones
+- **Imports**: Store Zustand, componentes UI, navegación
+- **Estructura**:
+  - Header con título y botones de acción
+  - Componente de formulario
+  - Botón de ayuda (HelpButton)
 
-##### handleSubmit Structure
+##### Estructura handleSubmit
 ```tsx
 const handleSubmit = async (data: FormDataType) => {
   try {
-    // 1. Data transformation (optional)
+    // 1. Transformación de datos (opcional)
     const transformedData = {
       ...data,
-      // Specific transformations as needed
+      // Transformaciones específicas según necesidad
     }
 
-    // 2. Store call (handles loading and errors)
+    // 2. Llamada al store (maneja carga y errores)
     await storeAction(transformedData)
 
-    // 3. Success notification with toast
+    // 3. Notificación de éxito con toast
     toast.push(
       <Notification type="success">
-        Operation completed successfully
+        Operación completada exitosamente
       </Notification>,
       { placement: 'top-center' },
     )
 
-    // 4. Automatic redirection (optional)
+    // 4. Redirección automática (opcional)
     setTimeout(() => {
       navigate('/destination-route')
     }, 2000)
 
   } catch(error) {
-    // 5. Error notification with toast
+    // 5. Notificación de error con toast
     toast.push(
       <Notification type="warning">
-        Error: {error instanceof Error ? error.message : 'Unknown error'}
+        Error: {error instanceof Error ? error.message : 'Error desconocido en operación'}
       </Notification>,
       { placement: 'top-center' },
     )
@@ -476,14 +476,14 @@ const handleSubmit = async (data: FormDataType) => {
 }
 ```
 
-##### Toast Notifications
+##### Notificaciones Toast
 ```tsx
 import { Notification, toast } from '@/components/ui'
 
-// Success
+// Éxito
 toast.push(
   <Notification type="success">
-    Operation completed successfully
+    Operación completada exitosamente
   </Notification>,
   { placement: 'top-center' },
 )
@@ -496,27 +496,27 @@ toast.push(
   { placement: 'top-center' },
 )
 
-// Available types: success, warning, danger, info
+// Tipos disponibles: success, warning, danger, info
 ```
 
-##### API Request Flow
+##### Flujo de Solicitud API
 ```
-View (handleSubmit) → Store (action) → Service (logic) → Repository (API call) → Backend
+Vista (handleSubmit) → Store (acción) → Servicio (lógica) → Repositorio (llamada API) → Backend
     ↑                      ↑              ↑                ↑                ↑
-Transformation        Loading/Error   Validations    HTTP Request    Endpoint
+Transformación        Carga/Error   Validaciones    Solicitud HTTP    Endpoint
 ```
 
-#### Error Handling in API Requests
+#### Manejo de Errores en Solicitudes API
 
-All try-catch blocks that make API requests must follow this standard pattern for consistent error handling:
+Todos los bloques try-catch que hacen solicitudes API deben seguir este patrón estándar para manejo consistente de errores:
 
-##### Error Handling Pattern
+##### Patrón de Manejo de Errores
 ```tsx
 import { AxiosError } from 'axios'
 import { Notification, toast } from '@/components/ui'
 
 try {
-  // API call
+  // Llamada API
   await apiCall()
 } catch(error) {
   if(error instanceof AxiosError) {
@@ -524,7 +524,7 @@ try {
     const message = responseWithError?.data?.error
 
     if(Array.isArray(message)) {
-      // If backend returns error array, show first one
+      // Si el backend retorna array de errores, mostrar el primero
       toast.push(
         <Notification type="danger">
           {message[0]}
@@ -532,134 +532,196 @@ try {
         { placement: 'top-center' }
       )
     } else {
-      // If simple error message
+      // Si es mensaje de error simple
       toast.push(
         <Notification type="danger">
-          {message || 'Unknown error in operation'}
+          {message || 'Error desconocido en operación'}
         </Notification>,
         { placement: 'top-center' }
       )
     }
   } else {
-    // Generic error not related to HTTP
+    // Error genérico no relacionado con HTTP
     toast.push(
       <Notification type="danger">
-        Error: {error instanceof Error ? error.message : 'Unknown error'}
+        Error: {error instanceof Error ? error.message : 'Error desconocido'}
       </Notification>,
       { placement: 'top-center' }
     )
   }
-  console.error('Complete error:', error)
+  console.error('Error completo:', error)
 }
 ```
 
-##### Pattern Rules
-- **Always check AxiosError**: Use `error instanceof AxiosError` to identify HTTP errors
-- **Extract backend message**: Look for message in `error.response?.data?.error`
-- **Handle error arrays**: If backend returns array, show only first element
-- **Consistent notifications**: Always use `Notification` component with `toast.push`
-- **Fixed placement**: All notifications must use `{ placement: 'top-center' }`
-- **Notification type**: Use `type="danger"` for errors (never "success" for errors)
-- **Message fallback**: Provide descriptive default messages
-- **Logging**: Always include `console.error('Complete error:', error)` for debugging
-- **Required imports**: `AxiosError` from axios, `Notification, toast` from '@/components/ui'
+##### Reglas del Patrón
+- **Siempre verificar AxiosError**: Usar `error instanceof AxiosError` para identificar errores HTTP
+- **Extraer mensaje del backend**: Buscar mensaje en `error.response?.data?.error`
+- **Manejar arrays de error**: Si el backend retorna array, mostrar solo el primer elemento
+- **Notificaciones consistentes**: Siempre usar componente `Notification` con `toast.push`
+- **Ubicación fija**: Todas las notificaciones deben usar `{ placement: 'top-center' }`
+- **Tipo de notificación**: Usar `type="danger"` para errores (nunca "success" para errores)
+- **Fallback de mensaje**: Proporcionar mensajes predeterminados descriptivos
+- **Logging**: Siempre incluir `console.error('Error completo:', error)` para depuración
+- **Imports requeridos**: `AxiosError` de axios, `Notification, toast` de '@/components/ui'
 
-#### Loading States and Empty States
+#### Estados de Carga y Estados Vacíos
 ```tsx
-{/* Empty state */}
+{/* Estado vacío */}
 <div className="text-center py-8">
   <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
     <TbIcon className="w-8 h-8 text-gray-400" />
   </div>
-  <h3 className="text-lg font-medium text-gray-900 mb-2">No data available</h3>
-  <p className="text-gray-500">Descriptive message</p>
+  <h3 className="text-lg font-medium text-gray-900 mb-2">No hay datos disponibles</h3>
+  <p className="text-gray-500">Mensaje descriptivo</p>
 </div>
 ```
 
-#### Scroll Areas with Fade
+#### Áreas de Scroll con Desvanecimiento
 ```tsx
-<div className="max-h-64 overflow-y-auto relative before:absolute before:top-0 before:left-0 before:right-0 before:h-4 before:bg-gradient-to-b before:from-white before:to-transparent before:pointer-events-none before:z-10 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-4 after:bg-gradient-to-t after:from-white after:to-transparent after:pointer-events-none after:z-10">
-  {/* Scrollable content */}
+<div className="max-h-64 overflow-y-auto relative before:absolute before:top-0 before:left-0 before:right-0 before:h-4 before:bg-gradient-to-b before:from-white before:to-transparent before:pointer-events-none before:z-10 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-4 after:bg-gradient-to-t after:from-white before:to-transparent before:pointer-events-none before:z-10">
+  {/* Contenido scrollable */}
 </div>
 ```
 
-### Docker Configuration
-- **Development**: Volume mounts for hot reload, node_modules excluded
-- **Database**: Health checks with `pg_isready`, persistent volumes for data/backups
-- **Environment**: Separate `.env` files for local/production stages
-- **Volume Strategy**: Selective file mounting to preserve installed dependencies while enabling hot reload
+### Implementación Flutter (Bloc/Cubit)
+- **Gestión de Estado**: Patrón BLoC con Cubit para gestión de estado más simple
+- **Navegación**: GoRouter para enrutamiento declarativo
+- **Llamadas API**: Dio para solicitudes HTTP
+- **Arquitectura**: Basada en características con directorio `features/` conteniendo capas bloc/data/presentation
 
-## Key Files & Directory Structure
+#### Estructura de Características Flutter
+```
+lib/features/[feature]/
+├── bloc/              # Lógica BLoC y gestión de estado
+├── data/              # Capa de datos (repositorios, servicios, modelos)
+└── presentation/      # Capa UI (páginas, widgets)
+```
+
+#### Implementación del Patrón BLoC
+```dart
+// Estados
+abstract class StoreState extends Equatable {
+  const StoreState();
+}
+
+class StoresLoaded extends StoreState {
+  final List<Store> stores;
+  final int total, page, limit;
+  const StoresLoaded(this.stores, this.total, this.page, this.limit);
+}
+
+// Eventos
+abstract class StoreEvent extends Equatable {
+  const StoreEvent();
+}
+
+class LoadStores extends StoreEvent {
+  final String? query;
+  const LoadStores({this.query});
+}
+
+// Bloc
+class StoreBloc extends Bloc<StoreEvent, StoreState> {
+  final StoreRepository _storeRepository;
+
+  StoreBloc(this._storeRepository) : super(StoreInitial()) {
+    on<LoadStores>(_onLoadStores);
+  }
+
+  Future<void> _onLoadStores(LoadStores event, Emitter<StoreState> emit) async {
+    emit(StoreLoading());
+    try {
+      final response = await _storeRepository.getStores(query: event.query);
+      emit(StoresLoaded(response.data, response.total, response.page, response.limit));
+    } catch (e) {
+      emit(StoreError(e.toString()));
+    }
+  }
+}
+```
+
+### Configuración Docker
+- **Desarrollo**: Montajes de volumen para recarga en caliente, node_modules excluidos
+- **Base de Datos**: Health checks con `pg_isready`, volúmenes persistentes para datos/backups
+- **Entorno**: Archivos `.env` separados para etapas local/producción
+- **Estrategia de Volumen**: Montaje selectivo de archivos para preservar dependencias instaladas mientras habilitar recarga en caliente
+
+## Archivos Clave y Estructura de Directorios
 
 ```
 choppi-backend/src/
-├── entities/           # TypeORM entities (User, Store, Product, StoreProduct)
-├── auth/              # JWT authentication module
-├── stores/            # Store CRUD with pagination/search
-├── products/          # Global product catalog
-├── store-products/    # Per-store inventory (price/stock)
-├── cart/              # Optional cart quote endpoint
-├── seeds/             # Database seeding service
-└── main.ts            # Swagger setup, validation pipes
+├── entities/           # Entidades TypeORM (User, Store, Product, StoreProduct)
+├── auth/              # Módulo de autenticación JWT
+├── stores/            # CRUD de tiendas con paginación/búsqueda
+├── products/          # Catálogo global de productos
+├── store-products/    # Inventario por tienda (precio/stock)
+├── cart/              # Endpoint opcional de cotización de carrito
+├── seeds/             # Servicio de siembra de base de datos
+└── main.ts            # Configuración Swagger, pipes de validación
 
 frontend/src/
-├── auth/              # Authentication context and providers
-├── components/        # Reusable UI components
-├── services/          # API service functions
-├── store/             # Zustand stores
-└── views/             # Page components
+├── auth/              # Contexto de autenticación y proveedores
+├── components/        # Componentes UI reutilizables
+├── services/          # Funciones de servicio API
+├── store/             # Stores Zustand
+└── views/             # Componentes de página
+
+choppi-app/lib/
+├── features/          # Módulos basados en características (auth, stores)
+├── core/              # Utilidades y temas principales
+├── shared/            # Widgets y utilidades compartidas
+└── main.dart          # Punto de entrada de la app
 
 .envs/
-├── .local/            # Docker development config
-└── .production/       # Cloud deployment config
+├── .local/            # Configuración Docker desarrollo
+└── .production/       # Configuración despliegue en nube
 
-docker-compose.yml     # Multi-service orchestration
+docker-compose.yml     # Orquestación multi-servicio
 ```
 
-## Development Priorities
+## Prioridades de Desarrollo
 
-1. **API Implementation**: Complete NestJS endpoints per README requirements
-2. **Database Relations**: Ensure proper entity relationships and foreign keys
-3. **Authentication**: JWT guards on protected routes
-4. **Pagination/Search**: Consistent implementation across all list endpoints
-5. **Frontend Integration**: Choose Next.js or Flutter, implement catalog browsing
-6. **Testing**: Unit tests for services, E2E for critical flows
-7. **Deployment**: Railway/Render for backend, Vercel for Next.js
+1. **Implementación API**: Completar endpoints NestJS según requisitos del README
+2. **Relaciones de Base de Datos**: Asegurar relaciones apropiadas de entidades y claves foráneas
+3. **Autenticación**: Guards JWT en rutas protegidas
+4. **Paginación/Búsqueda**: Implementación consistente en todos los endpoints de lista
+5. **Integración Frontend**: Elegir Next.js o Flutter, implementar navegación de catálogo
+6. **Testing**: Tests unitarios para servicios, E2E para flujos críticos
+7. **Despliegue**: Railway/Render para backend, Vercel para Next.js
 
-## Quality Standards
+## Estándares de Calidad
 
-- **TypeScript**: Strict typing, no `any` types
-- **Validation**: class-validator on all DTOs, whitelist validation pipes
-- **Database**: TypeORM migrations in production, proper indexing
-- **API Design**: RESTful conventions, consistent error responses
-- **Documentation**: Swagger annotations, clear API descriptions
-- **Security**: Bcrypt password hashing, JWT expiration handling
-- **Frontend**: Strict TypeScript, React Hook Form for forms, Zustand for state, Tabler icons, consistent UI patterns
-- **Forms**: Controller pattern with RHF, ButtonGroup for actions, error handling with toast notifications
-- **Styling**: Tailwind CSS with consistent design system, gradient headers, backdrop blur effects
-- **Color Palette**: 
-  - Primary: #FAA531 (Orange)
-  - Background: #F9FAFB (Light Gray)
-  - Text Dark: #111827 (Dark Gray)
-  - Text Medium: #4B5563 (Medium Gray)
-  - Text Light: #9CA3AE (Light Gray)
-  - Black: #000000
-  - Primary Subtle: rgba(250, 165, 49, 0.1)
-- **API Integration**: Axios through ApiService layer, consistent error handling, loading states
+- **TypeScript**: Tipado estricto, sin tipos `any`
+- **Validación**: class-validator en todos los DTOs, pipes de validación whitelist
+- **Base de Datos**: Migraciones TypeORM en producción, indexación apropiada
+- **Diseño API**: Convenciones RESTful, respuestas de error consistentes
+- **Documentación**: Anotaciones Swagger, descripciones claras de API
+- **Seguridad**: Hashing de contraseñas bcrypt, manejo de expiración JWT
+- **Frontend**: TypeScript estricto, React Hook Form para formularios, Zustand para estado, iconos Tabler, patrones UI consistentes
+- **Formularios**: Patrón Controller con RHF, ButtonGroup para acciones, manejo de errores con notificaciones toast
+- **Estilos**: Tailwind CSS con sistema de diseño consistente, headers con gradiente, efectos backdrop blur
+- **Paleta de Colores**:
+  - Primario: #FAA531 (Naranja)
+  - Fondo: #F9FAFB (Gris Claro)
+  - Texto Oscuro: #111827 (Gris Oscuro)
+  - Texto Medio: #4B5563 (Gris Medio)
+  - Texto Claro: #9CA3AE (Gris Claro)
+  - Negro: #000000
+  - Primario Suave: rgba(250, 165, 49, 0.1)
+- **Integración API**: Axios a través de capa ApiService, manejo consistente de errores, estados de carga
 
-## Common Patterns
+## Patrones Comunes
 
-### Adding New Features
-1. **Backend**: Create module → controller → service → entities → DTOs
-2. **Frontend**: Create module structure → define types → implement repository (ApiService) → create service → configure Zustand store → build components (reuse ECME template) → create views → add routing
-3. **Database**: Manual schema updates (no auto-migration)
-4. **Auth**: Check permissions in guards, update role/permission entities
+### Agregando Nuevas Características
+1. **Backend**: Crear módulo → controlador → servicio → entidades → DTOs
+2. **Frontend**: Crear estructura de módulo → definir tipos → implementar repositorio (ApiService) → crear servicio → configurar store Zustand → construir componentes (reutilizar plantilla ECME) → crear vistas → agregar enrutamiento
+3. **Database**: Actualizaciones manuales de esquema (sin auto-migración)
+4. **Auth**: Verificar permisos en guards, actualizar entidades rol/permiso
 
-#### API Integration
-- Use `ApiService.fetchDataWithAxios<T>()` for typed requests
-- Handle errors in `catch` blocks with appropriate user feedback
-- Include loading states for async operations
-- **Architecture**: Always follow service → repository → ApiService pattern
-- **No fetch**: Never use `fetch` directly, always use ApiService through repository layer
-- **Production API URL**: In production, frontend calls `http://172.31.75.75/api`
-<parameter name="filePath">d:\Workplace\my_full_stack\.github\copilot-instructions.md
+#### Integración API
+- Usar `ApiService.fetchDataWithAxios<T>()` para solicitudes tipadas
+- Manejar errores en bloques `catch` con retroalimentación apropiada al usuario
+- Incluir estados de carga para operaciones asíncronas
+- **Arquitectura**: Siempre seguir patrón servicio → repositorio → ApiService
+- **Sin fetch**: Nunca usar `fetch` directamente, siempre usar ApiService a través de capa repositorio
+- **URL Base**: Configurada vía variable de entorno `VITE_APIURL` (desarrollo: localhost:3000, producción: URL API configurada)

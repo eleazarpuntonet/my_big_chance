@@ -20,17 +20,17 @@ type DropdownList = {
 
 const dropdownItemList: DropdownList[] = [
     {
-        label: 'Profile',
+        label: 'Perfil',
         path: '/concepts/account/settings',
         icon: <PiUserDuotone />,
     },
     {
-        label: 'Account Setting',
+        label: 'Configuración de Cuenta',
         path: '/concepts/account/settings',
         icon: <PiGearDuotone />,
     },
     {
-        label: 'Activity Log',
+        label: 'Registro de Actividad',
         path: '/concepts/account/activity-log',
         icon: <PiPulseDuotone />,
     },
@@ -65,10 +65,10 @@ const _UserDropdown = () => {
                     <Avatar {...avatarProps} />
                     <div>
                         <div className="font-bold text-gray-900 dark:text-gray-100">
-                            {userName || 'Anonymous'}
+                            {userName || 'Anónimo'}
                         </div>
                         <div className="text-xs">
-                            {email || 'No email available'}
+                            {email || 'Correo no disponible'}
                         </div>
                     </div>
                 </div>
@@ -90,14 +90,14 @@ const _UserDropdown = () => {
             ))}
             <Dropdown.Item variant="divider" />
             <Dropdown.Item
-                eventKey="Sign Out"
+                eventKey="Cerrar Sesión"
                 className="gap-2"
                 onClick={handleSignOut}
             >
                 <span className="text-xl">
                     <PiSignOutDuotone />
                 </span>
-                <span>Sign Out</span>
+                <span>Cerrar Sesión</span>
             </Dropdown.Item>
         </Dropdown>
     )

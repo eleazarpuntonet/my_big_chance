@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import react ,{ useState } from 'react'
+import { TbMail, TbLock } from 'react-icons/tb'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import { FormItem, Form } from '@/components/ui/Form'
@@ -25,11 +26,11 @@ type SignInFormSchema = {
 
 const validationSchema: ZodType<SignInFormSchema> = z.object({
     email: z
-        .string({ required_error: 'Please enter your email' })
-        .min(1, { message: 'Please enter your email' }),
+        .string({ required_error: 'Por favor ingresa tu correo electrónico' })
+        .min(1, { message: 'Por favor ingresa tu correo electrónico' }),
     password: z
-        .string({ required_error: 'Please enter your password' })
-        .min(1, { message: 'Please enter your password' }),
+        .string({ required_error: 'Por favor ingresa tu contraseña' })
+        .min(1, { message: 'Por favor ingresa tu contraseña' }),
 })
 
 const SignInForm = (props: SignInFormProps) => {
@@ -43,8 +44,8 @@ const SignInForm = (props: SignInFormProps) => {
         control,
     } = useForm<SignInFormSchema>({
         defaultValues: {
-            email: 'admin-01@ecme.com',
-            password: '123Qwe',
+            email: '',
+            password: '',
         },
         resolver: zodResolver(validationSchema),
     })
@@ -71,7 +72,7 @@ const SignInForm = (props: SignInFormProps) => {
         <div className={className}>
             <Form onSubmit={handleSubmit(onSignIn)}>
                 <FormItem
-                    label="Email"
+                    label="Correo electrónico"
                     invalid={Boolean(errors.email)}
                     errorMessage={errors.email?.message}
                 >
@@ -81,15 +82,16 @@ const SignInForm = (props: SignInFormProps) => {
                         render={({ field }) => (
                             <Input
                                 type="email"
-                                placeholder="Email"
+                                placeholder="ejemplo@email.com"
                                 autoComplete="off"
+                                prefix={<TbMail className="text-black" />}
                                 {...field}
                             />
                         )}
                     />
                 </FormItem>
                 <FormItem
-                    label="Password"
+                    label="Contraseña"
                     invalid={Boolean(errors.password)}
                     errorMessage={errors.password?.message}
                     className={classNames(
@@ -104,8 +106,9 @@ const SignInForm = (props: SignInFormProps) => {
                         render={({ field }) => (
                             <PasswordInput
                                 type="text"
-                                placeholder="Password"
+                                placeholder="Ingrese su contraseña"
                                 autoComplete="off"
+                                prefix={<TbLock className="text-black" />}
                                 {...field}
                             />
                         )}
@@ -117,8 +120,9 @@ const SignInForm = (props: SignInFormProps) => {
                     loading={isSubmitting}
                     variant="solid"
                     type="submit"
+                    className="bg-black text-white hover:bg-gray-800"
                 >
-                    {isSubmitting ? 'Signing in...' : 'Sign In'}
+                    {isSubmitting ? 'Iniciando sesión...' : 'Iniciar Sesión'}
                 </Button>
             </Form>
         </div>
