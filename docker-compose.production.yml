@@ -22,7 +22,7 @@ services:
     networks:
       - my_stack_network
     ports:
-      - "8832:5432"
+      - "5432:5432"
 
   backend:
     image: myapp_backend
@@ -71,6 +71,7 @@ services:
     ports:
       - "80:80"
       - "8000:8000"
+      - "5432:5432"
     networks:
       - my_stack_network
 

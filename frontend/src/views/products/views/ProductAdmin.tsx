@@ -14,7 +14,7 @@ const ProductAdmin = () => {
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
-      <div className="bg-gradient-to-r from-green-500 to-blue-600 p-4 rounded-t-xl mb-6">
+      <div className="bg-gradient-to-r from-primary-500 to-primary-600 p-4 rounded-t-xl mb-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <TbPackage className="w-6 h-6 text-white mr-3" />
@@ -25,7 +25,7 @@ const ProductAdmin = () => {
 
       {/* Create Product Form */}
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-        <div className="bg-gradient-to-r from-green-500 to-blue-600 p-4">
+        <div className="bg-gradient-to-r from-primary-500 to-primary-600 p-4">
           <div className="flex items-center">
             <TbPlus className="w-6 h-6 text-white mr-3" />
             <h4 className="text-lg font-semibold text-white">Create New Product</h4>
@@ -38,7 +38,7 @@ const ProductAdmin = () => {
 
       {/* Future: Product List for editing/deleting */}
       <div className="mt-6 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-4">
+        <div className="bg-gradient-to-r from-primary-500 to-primary-600 p-4">
           <div className="flex items-center">
             <TbPackage className="w-6 h-6 text-white mr-3" />
             <h4 className="text-lg font-semibold text-white">Product Management</h4>

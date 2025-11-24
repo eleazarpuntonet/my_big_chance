@@ -48,7 +48,7 @@ const StoresList = () => {
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-t-xl mb-6">
+      <div className="bg-gradient-to-r from-primary-500 to-primary-600 p-4 rounded-t-xl mb-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <TbBuildingStore className="w-6 h-6 text-white mr-3" />
@@ -94,7 +94,7 @@ const StoresList = () => {
                 className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
                 onClick={() => navigate(`/stores/${store.id}`)}
               >
-                <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-4">
+                <div className="bg-gradient-to-r from-primary-500 to-primary-600 p-4">
                   <div className="flex items-center">
                     <TbBuildingStore className="w-6 h-6 text-white mr-3" />
                     <h4 className="text-lg font-semibold text-white truncate">{store.name}</h4>

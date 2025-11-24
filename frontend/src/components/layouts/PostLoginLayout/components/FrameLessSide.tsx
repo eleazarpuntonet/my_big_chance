@@ -84,14 +84,14 @@ const FrameLessSide = ({ children }: CommonProps) => {
                         background={false}
                         className={classNames('dark pt-6')}
                         contentClass="h-[calc(100vh-8rem)]"
-                        mode="dark"
+                        mode="light"
                     />
                 )}
                 <FrameLessGap className="min-h-screen min-w-0 relative w-full">
-                    <div className="bg-white dark:bg-gray-900 flex flex-col flex-1 h-full rounded-2xl">
+                    <div className="bg-gray-50 dark:bg-gray-800 flex flex-col flex-1 h-full rounded-2xl">
                         <Header
                             className={classNames(
-                                'rounded-t-2xl dark:bg-gray-900',
+                                'rounded-t-2xl bg-gray-50 dark:bg-gray-800',
                                 isSticky && 'shadow !rounded-none',
                             )}
                             headerStart={

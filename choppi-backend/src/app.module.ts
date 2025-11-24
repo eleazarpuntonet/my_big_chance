@@ -24,7 +24,7 @@ import { CartModule } from './cart/cart.module';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       entities: [User, Store, Product, StoreProduct],
-      synchronize: process.env.NODE_ENV !== 'production', // Temporarily enabled for seeding
+      synchronize: true, // Enable sync for seeding in production
       logging: process.env.NODE_ENV === 'development',
     }),
     AuthModule,

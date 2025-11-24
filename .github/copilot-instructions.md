@@ -637,6 +637,14 @@ docker-compose.yml     # Multi-service orchestration
 - **Frontend**: Strict TypeScript, React Hook Form for forms, Zustand for state, Tabler icons, consistent UI patterns
 - **Forms**: Controller pattern with RHF, ButtonGroup for actions, error handling with toast notifications
 - **Styling**: Tailwind CSS with consistent design system, gradient headers, backdrop blur effects
+- **Color Palette**: 
+  - Primary: #FAA531 (Orange)
+  - Background: #F9FAFB (Light Gray)
+  - Text Dark: #111827 (Dark Gray)
+  - Text Medium: #4B5563 (Medium Gray)
+  - Text Light: #9CA3AE (Light Gray)
+  - Black: #000000
+  - Primary Subtle: rgba(250, 165, 49, 0.1)
 - **API Integration**: Axios through ApiService layer, consistent error handling, loading states
 
 ## Common Patterns

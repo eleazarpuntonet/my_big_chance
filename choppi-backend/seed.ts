@@ -10,6 +10,9 @@ async function bootstrap() {
   const { AppModule } = await import(`${basePath}/app.module${ext}`);
   const { SeedsService } = await import(`${basePath}/seeds/seeds.service${ext}`);
 
+  // Enable sync for seeding
+  process.env.SEEDING = 'true';
+
   const app = await NestFactory.createApplicationContext(AppModule);
   const seedsService = app.get(SeedsService);
 
