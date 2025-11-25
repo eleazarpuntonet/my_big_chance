@@ -67,6 +67,8 @@ La aplicación está desplegada en AWS EC2 con enrutamiento Traefik:
 **Endpoints de producción:**
 - **Frontend Web**: http://172.31.75.75/app
 - **Backend API**: http://172.31.75.75/api
+- **Página de Registro**: http://172.31.75.75/app/sign-up
+- **Página de Login**: http://172.31.75.75/app/sign-in
 - **Traefik Dashboard**: http://172.31.75.75
 
 ⚠️ **IMPORTANTE:** Estos endpoints estarán disponibles solo hasta el **2 de diciembre de 2025**. Después de esta fecha, el servidor EC2 expirará y la aplicación dejará de estar accesible en producción.

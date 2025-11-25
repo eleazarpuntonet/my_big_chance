@@ -106,7 +106,12 @@ function AuthProvider({ children }: AuthProviderProps) {
         try {
             const resp = await apiSignUp(values)
             if (resp) {
-                handleSignIn({ accessToken: resp.token }, resp.user)
+                if(resp.access_token != null) {
+                    const newAccessToken = resp.access_token
+                    AxiosBase.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`
+                    setToken(newAccessToken)
+                }
+                handleSignIn({ access_token: resp.access_token }, {})
                 redirect()
                 return {
                     status: 'success',

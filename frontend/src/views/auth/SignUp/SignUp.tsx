@@ -29,9 +29,9 @@ export const SignUpBase = ({
                 />
             </div>
             <div className="mb-8">
-                <h3 className="mb-1">Sign Up</h3>
+                <h3 className="mb-1">Crear Cuenta en Choppi</h3>
                 <p className="font-semibold heading-text">
-                    And lets get started with your free trial
+                    Únete a la plataforma de comercio electrónico
                 </p>
             </div>
             {message && (
@@ -42,13 +42,13 @@ export const SignUpBase = ({
             <SignUpForm disableSubmit={disableSubmit} setMessage={setMessage} />
             <div>
                 <div className="mt-6 text-center">
-                    <span>Already have an account? </span>
+                    <span>¿Ya tienes una cuenta? </span>
                     <ActionLink
                         to={signInUrl}
                         className="heading-text font-bold"
                         themeColor={false}
                     >
-                        Sign in
+                        Iniciar sesión
                     </ActionLink>
                 </div>
             </div>
