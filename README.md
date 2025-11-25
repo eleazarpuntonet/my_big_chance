@@ -13,7 +13,7 @@ Choppi es una aplicación de comercio electrónico full-stack que implementa un 
 
 🚨 **El servidor EC2 estará disponible solo hasta el 2 de diciembre de 2025** (7 días desde el 25/11/2025). Después de esta fecha, la aplicación en producción dejará de estar accesible.
 
-**📱 Descarga la APK ahora:** [choppi_app.apk](choppi_app.apk) - ¡Instala la aplicación móvil antes de que expire el servidor!
+**📱 Descarga la APK ahora:** [choppiapp.apk](choppiapp.apk) - ¡Instala la aplicación móvil antes de que expire el servidor!
 
 ## 🏗️ Arquitectura
 
@@ -161,9 +161,9 @@ Los archivos de configuración están organizados por entorno:
 
 ### 🚀 **¡Descarga la APK Ahora!**
 
-[![Download APK](https://img.shields.io/badge/Download-APK-blue?style=for-the-badge&logo=android&logoColor=white)](choppi_app.apk)
+[![Download APK](https://img.shields.io/badge/Download-APK-blue?style=for-the-badge&logo=android&logoColor=white)](choppiapp.apk)
 
-**Archivo APK disponible:** [choppi_app.apk](choppi_app.apk) (ubicado en la raíz del repositorio)
+**Archivo APK disponible:** [choppiapp.apk](choppiapp.apk) (ubicado en la raíz del repositorio)
 
 **⚠️ IMPORTANTE:** Descarga e instala la aplicación móvil **ANTES del 2 de diciembre de 2025**, ya que el servidor EC2 expirará y la app dejará de funcionar.
 
@@ -180,11 +180,11 @@ Los archivos de configuración están organizados por entorno:
 ### Build de Producción
 
 El APK compilado está disponible en dos ubicaciones:
-- **Raíz del repo**: `choppi_app.apk` ← **¡Descárgalo aquí!**
+- **Raíz del repo**: `choppiapp.apk` ← **¡Descárgalo aquí!**
 - **Directorio Flutter**: `choppi-app/build/app/outputs/flutter-apk/app-release.apk`
 
 ### Instalación Rápida
-1. **Descarga**: Haz clic en [choppi_app.apk](choppi_app.apk) o descarga desde la raíz del repo
+1. **Descarga**: Haz clic en [choppiapp.apk](choppiapp.apk) o descarga desde la raíz del repo
 2. **Transferir**: Copia el archivo a tu dispositivo Android
 3. **Instalar**: Habilita "Instalación de fuentes desconocidas" en ajustes de Android
 4. **Ejecutar**: Abre la app Choppi y comienza a explorar el catálogo
@@ -282,7 +282,7 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 
 ### 📋 **Lista de Verificación - No Pierdas la Oportunidad:**
 
-- [ ] **Descarga la APK**: [choppi_app.apk](choppi_app.apk) - ¡Disponible en la raíz del repo!
+- [ ] **Descarga la APK**: [choppiapp.apk](choppiapp.apk) - ¡Disponible en la raíz del repo!
 - [ ] **Instala la app** en tu dispositivo Android
 - [ ] **Prueba la aplicación completa** antes de que expire el servidor EC2
 - [ ] **Explora el catálogo** de productos y tiendas
