@@ -35,31 +35,52 @@ class AuthError extends AuthState {
   List<Object> get props => [message, error ?? '', statusCode ?? 0];
 }
 
-// Eventos del AuthBloc (aunque usamos Cubit, podemos definir eventos para claridad)
-abstract class AuthEvent {}
+// Eventos del AuthBloc
+abstract class AuthEvent extends Equatable {
+  const AuthEvent();
+
+  @override
+  List<Object> get props => [];
+}
 
 class LoginRequested extends AuthEvent {
   final String email;
   final String password;
 
-  LoginRequested(this.email, this.password);
+  const LoginRequested(this.email, this.password);
+
+  @override
+  List<Object> get props => [email, password];
+}
+
+class RegisterRequested extends AuthEvent {
+  final String email;
+  final String password;
+
+  const RegisterRequested(this.email, this.password);
+
+  @override
+  List<Object> get props => [email, password];
 }
 
 class LogoutRequested extends AuthEvent {}
 
-// AuthCubit (usando Cubit en lugar de Bloc para simplicidad)
-class AuthBloc extends Cubit<AuthState> {
+// AuthBloc usando Bloc
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository;
 
-  AuthBloc(this._authRepository) : super(AuthInitial());
+  AuthBloc(this._authRepository) : super(AuthInitial()) {
+    on<LoginRequested>(_onLoginRequested);
+    on<RegisterRequested>(_onRegisterRequested);
+    on<LogoutRequested>(_onLogoutRequested);
+  }
 
-  Future<void> login(String email, String password) async {
+  Future<void> _onLoginRequested(LoginRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      final token = await _authRepository.login(email, password);
+      final token = await _authRepository.login(event.email, event.password);
       emit(AuthAuthenticated(token));
     } catch (e) {
-      // Mejorar el manejo de AuthException
       if (e is AuthException) {
         emit(AuthError(
           e.userFriendlyMessage,
@@ -72,7 +93,38 @@ class AuthBloc extends Cubit<AuthState> {
     }
   }
 
-  void logout() {
+  Future<void> _onRegisterRequested(RegisterRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      final token = await _authRepository.register(event.email, event.password);
+      emit(AuthAuthenticated(token));
+    } catch (e) {
+      if (e is AuthException) {
+        emit(AuthError(
+          e.userFriendlyMessage,
+          error: e.error,
+          statusCode: e.statusCode,
+        ));
+      } else {
+        emit(AuthError(e.toString()));
+      }
+    }
+  }
+
+  void _onLogoutRequested(LogoutRequested event, Emitter<AuthState> emit) {
     emit(AuthInitial());
+  }
+
+  // Métodos convenientes para usar desde la UI
+  void login(String email, String password) {
+    add(LoginRequested(email, password));
+  }
+
+  void register(String email, String password) {
+    add(RegisterRequested(email, password));
+  }
+
+  void logout() {
+    add(LogoutRequested());
   }
 }

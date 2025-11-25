@@ -6,6 +6,7 @@ import 'features/auth/bloc/auth_bloc.dart';
 import 'features/auth/data/repositories/auth_repository.dart';
 import 'features/auth/data/services/auth_service.dart';
 import 'features/auth/presentation/pages/login_page.dart';
+import 'features/auth/presentation/pages/register_page.dart';
 import 'features/stores/presentation/pages/stores_page.dart';
 import 'features/stores/presentation/pages/store_detail_page.dart';
 import 'features/stores/bloc/store_bloc.dart';
@@ -49,6 +50,10 @@ class MyApp extends StatelessWidget {
         GoRoute(
           path: '/login',
           builder: (context, state) => const LoginPage(),
+        ),
+        GoRoute(
+          path: '/register',
+          builder: (context, state) => const RegisterPage(),
         ),
         GoRoute(
           path: '/stores/:id',

@@ -92,6 +92,85 @@ class AuthService {
     }
   }
 
+  Future<Map<String, dynamic>> register(String email, String password) async {
+    try {
+      final response = await _dio.post(
+        '/auth/register',
+        data: {
+          'email': email,
+          'password': password,
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // Respuesta exitosa según el formato especificado
+        final data = response.data;
+        if (data is Map<String, dynamic> && data.containsKey('access_token')) {
+          return data;
+        } else {
+          throw Exception('Respuesta del servidor inválida: falta access_token');
+        }
+      } else {
+        throw Exception('Error HTTP ${response.statusCode}: ${response.statusMessage}');
+      }
+    } on DioException catch (e) {
+      // Mejorar el manejo de errores según el formato especificado
+      if (e.response != null) {
+        final statusCode = e.response?.statusCode ?? 500;
+        final responseData = e.response?.data;
+
+        if (responseData is Map<String, dynamic>) {
+          // Manejar errores según el formato especificado
+          final message = responseData['message'] ?? 'Error desconocido';
+          final error = responseData['error'] ?? 'Error';
+          final errorStatusCode = responseData['statusCode'] ?? statusCode;
+
+          // Crear una excepción más descriptiva
+          throw AuthException(
+            message: message,
+            error: error,
+            statusCode: errorStatusCode,
+            originalMessage: e.message ?? 'Sin mensaje adicional',
+          );
+        } else if (statusCode == 400) {
+          // Error de validación o usuario ya existe
+          throw AuthException(
+            message: 'Error en el registro',
+            error: 'Bad Request',
+            statusCode: 400,
+            originalMessage: e.response?.statusMessage ?? e.message ?? 'Datos inválidos',
+          );
+        } else {
+          throw AuthException(
+            message: 'Error del servidor',
+            error: 'Server Error',
+            statusCode: statusCode,
+            originalMessage: e.response?.statusMessage ?? e.message ?? 'Error desconocido',
+          );
+        }
+      } else {
+        // Error de red
+        throw AuthException(
+          message: 'Error de conexión',
+          error: 'Network Error',
+          statusCode: 0,
+          originalMessage: e.message ?? 'Sin conexión a internet',
+        );
+      }
+    } catch (e) {
+      // Re-lanzar AuthException o convertir otros errores
+      if (e is AuthException) {
+        rethrow;
+      }
+      throw AuthException(
+        message: 'Error inesperado',
+        error: 'Unexpected Error',
+        statusCode: 500,
+        originalMessage: e.toString(),
+      );
+    }
+  }
+
   // Método para verificar token si es necesario
   Future<bool> verifyToken(String token) async {
     try {

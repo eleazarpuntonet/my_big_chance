@@ -11,6 +11,12 @@ class AuthRepository {
     return token;
   }
 
+  Future<String> register(String email, String password) async {
+    final response = await _authService.register(email, password);
+    final token = response['access_token'] as String;
+    return token;
+  }
+
   Future<bool> verifyToken(String token) async {
     return await _authService.verifyToken(token);
   }

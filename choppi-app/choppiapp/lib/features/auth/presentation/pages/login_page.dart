@@ -356,6 +356,33 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(height: 20),
                             // Texto adicional
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '¿No tienes cuenta? ',
+                                  style: TextStyle(
+                                    color: const Color(0xFF4B5563), // Texto medio
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    context.go('/register');
+                                  },
+                                  child: Text(
+                                    'Crear cuenta',
+                                    style: TextStyle(
+                                      color: const Color(0xFFFAA531), // Naranja primario
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
                             Text(
                               '¿Olvidaste tu contraseña?',
                               style: TextStyle(
