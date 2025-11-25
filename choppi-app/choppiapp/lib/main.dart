@@ -13,6 +13,8 @@ import 'features/stores/data/repositories/store_repository.dart';
 import 'features/stores/data/services/store_service.dart';
 import 'features/products/presentation/pages/products_page.dart';
 import 'features/products/presentation/pages/create_product_page.dart';
+import 'features/products/presentation/pages/product_detail_page.dart';
+import 'features/products/presentation/pages/add_product_to_store_page.dart';
 import 'shared/widgets/custom_navigation_wrapper.dart';
 import 'features/products/bloc/product_bloc.dart';
 import 'features/products/data/repositories/product_repository.dart';
