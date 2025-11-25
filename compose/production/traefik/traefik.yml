@@ -11,7 +11,7 @@ entryPoints:
 http:
   routers:
     frontend-router:
-      rule: "Host(`172.31.75.75`) || Host(`18.218.246.134`)"
+      rule: "Host(`172.31.75.75`) && PathPrefix(`/`) || Host(`18.218.246.134`) && PathPrefix(`/`)"
       entryPoints:
         - web
       service: nginx-frontend

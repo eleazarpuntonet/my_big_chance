@@ -14,11 +14,11 @@ export class ProductsController {
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({
     summary: 'Create a new product',
-    description: 'Creates a new global product that can be associated with stores. Requires authentication.'
+    description: 'Creates a new global product that can be associated with stores. If storeId is provided along with storePrice and storeStock, the product will also be added to the specified store inventory.'
   })
   @ApiResponse({
     status: 201,
-    description: 'Product created successfully',
+    description: 'Product created successfully. If storeId is provided, the product is also associated with the store.',
     schema: {
       type: 'object',
       properties: {

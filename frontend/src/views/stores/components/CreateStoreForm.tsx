@@ -25,7 +25,7 @@ const CreateStoreForm: React.FC<CreateStoreFormProps> = ({
       reset()
       toast.push(
         <Notification type="success">
-          Store created successfully
+          Tienda creada exitosamente
         </Notification>,
         { placement: 'top-center' }
       )
@@ -42,7 +42,7 @@ const CreateStoreForm: React.FC<CreateStoreFormProps> = ({
         } else {
           toast.push(
             <Notification type="danger">
-              {message || 'Error creating store'}
+              {message || 'Error al crear la tienda'}
             </Notification>,
             { placement: 'top-center' }
           )
@@ -50,7 +50,7 @@ const CreateStoreForm: React.FC<CreateStoreFormProps> = ({
       } else {
         toast.push(
           <Notification type="danger">
-            Error: {error instanceof Error ? error.message : 'Unknown error'}
+            Error: {error instanceof Error ? error.message : 'Error desconocido'}
           </Notification>,
           { placement: 'top-center' }
         )
@@ -73,57 +73,57 @@ const CreateStoreForm: React.FC<CreateStoreFormProps> = ({
           onSubmit={handleSubmit(handleFormSubmit)}
         >
           <div className='flex flex-row gap-1'>
-            <FormItem label="Name" error={errors.name?.message}>
+            <FormItem label="Nombre" error={errors.name?.message}>
               <Controller
                 name="name"
                 control={control}
-                rules={{ required: 'Name is required' }}
+                rules={{ required: 'El nombre es obligatorio' }}
                 render={({ field }) => (
                   <Input
                     size="sm"
-                    placeholder="Store name"
+                    placeholder="Nombre de la tienda"
                     {...field}
                   />
                 )}
               />
             </FormItem>
 
-            <FormItem label="Description">
+            <FormItem label="Descripción">
               <Controller
                 name="description"
                 control={control}
                 render={({ field }) => (
                   <Input
                     size="sm"
-                    placeholder="Store description"
+                    placeholder="Descripción de la tienda"
                     {...field}
                   />
                 )}
               />
             </FormItem>
 
-            <FormItem label="Address">
+            <FormItem label="Dirección">
               <Controller
                 name="address"
                 control={control}
                 render={({ field }) => (
                   <Input
                     size="sm"
-                    placeholder="Store address"
+                    placeholder="Dirección de la tienda"
                     {...field}
                   />
                 )}
               />
             </FormItem>
 
-            <FormItem label="Phone">
+            <FormItem label="Teléfono">
               <Controller
                 name="phone"
                 control={control}
                 render={({ field }) => (
                   <Input
                     size="sm"
-                    placeholder="Store phone number"
+                    placeholder="Número de teléfono"
                     {...field}
                   />
                 )}
@@ -139,7 +139,7 @@ const CreateStoreForm: React.FC<CreateStoreFormProps> = ({
               className="px-3 py-1 bg-blue-600 text-white hover:bg-blue-700"
               loading={loading}
             >
-              Create Store
+              Crear Tienda
             </Button>
             <Button
               type='button'
@@ -148,7 +148,7 @@ const CreateStoreForm: React.FC<CreateStoreFormProps> = ({
               onClick={handleClear}
               className="px-3 py-1 bg-gray-600 text-white hover:bg-gray-700"
             >
-              Clear
+              Limpiar
             </Button>
           </div>
         </Form>

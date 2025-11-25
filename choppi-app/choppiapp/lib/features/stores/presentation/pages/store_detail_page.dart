@@ -63,7 +63,25 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.go('/'),
+          tooltip: 'Volver a tiendas',
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.home),
+            onPressed: () => context.go('/'),
+            tooltip: 'Inicio',
+          ),
+          IconButton(
+            icon: const Icon(Icons.inventory),
+            onPressed: () => context.go('/products'),
+            tooltip: 'Ver productos',
+          ),
+          IconButton(
+            icon: const Icon(Icons.add_shopping_cart),
+            onPressed: () => context.go('/stores/${widget.storeId}/add-product'),
+            tooltip: 'Agregar producto',
+          ),
+        ],
       ),
       body: BlocListener<StoreBloc, StoreState>(
         listener: (context, state) {

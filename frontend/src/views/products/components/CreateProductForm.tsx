@@ -1,7 +1,8 @@
-import React from 'react'
-import { Button, Form, FormItem, Input } from '@/components/ui'
-import { Controller, useForm } from 'react-hook-form'
+import React, { useEffect } from 'react'
+import { Button, Form, FormItem, Input, Select } from '@/components/ui'
+import { Controller, useForm, useWatch } from 'react-hook-form'
 import { useProductStore } from '../store/useProductStore'
+import { useStoreStore } from '../../stores/store/useStoreStore'
 import { CreateProductDto } from '../types/product.types'
 import { TbPackage, TbPlus } from 'react-icons/tb'
 import { Notification, toast } from '@/components/ui'
@@ -17,7 +18,14 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
   onClear
 }) => {
   const { loading } = useProductStore()
-  const { control, handleSubmit, reset, formState: { errors } } = useForm<CreateProductDto>()
+  const { stores, loading: storesLoading, fetchStores } = useStoreStore()
+  const { control, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<CreateProductDto>()
+
+  const selectedStoreId = watch('storeId')
+
+  useEffect(() => {
+    fetchStores()
+  }, [fetchStores])
 
   const handleFormSubmit = async (data: CreateProductDto) => {
     try {
@@ -25,7 +33,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
       reset()
       toast.push(
         <Notification type="success">
-          Product created successfully
+          Producto creado exitosamente
         </Notification>,
         { placement: 'top-center' }
       )
@@ -42,7 +50,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
         } else {
           toast.push(
             <Notification type="danger">
-              {message || 'Error creating product'}
+              {message || 'Error al crear el producto'}
             </Notification>,
             { placement: 'top-center' }
           )
@@ -50,7 +58,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
       } else {
         toast.push(
           <Notification type="danger">
-            Error: {error instanceof Error ? error.message : 'Unknown error'}
+            Error: {error instanceof Error ? error.message : 'Error desconocido'}
           </Notification>,
           { placement: 'top-center' }
         )
@@ -73,55 +81,55 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
           onSubmit={handleSubmit(handleFormSubmit)}
         >
           <div className='flex flex-row gap-1'>
-            <FormItem label="Name" error={errors.name?.message}>
+            <FormItem label="Nombre" error={errors.name?.message}>
               <Controller
                 name="name"
                 control={control}
-                rules={{ required: 'Name is required' }}
+                rules={{ required: 'El nombre es obligatorio' }}
                 render={({ field }) => (
                   <Input
                     size="sm"
-                    placeholder="Product name"
+                    placeholder="Nombre del producto"
                     {...field}
                   />
                 )}
               />
             </FormItem>
 
-            <FormItem label="Description">
+            <FormItem label="Descripción">
               <Controller
                 name="description"
                 control={control}
                 render={({ field }) => (
                   <Input
                     size="sm"
-                    placeholder="Product description"
+                    placeholder="Descripción del producto"
                     {...field}
                   />
                 )}
               />
             </FormItem>
 
-            <FormItem label="Category">
+            <FormItem label="Categoría">
               <Controller
                 name="category"
                 control={control}
                 render={({ field }) => (
                   <Input
                     size="sm"
-                    placeholder="Product category"
+                    placeholder="Categoría del producto"
                     {...field}
                   />
                 )}
               />
             </FormItem>
 
-            <FormItem label="Base Price">
+            <FormItem label="Precio Base">
               <Controller
                 name="basePrice"
                 control={control}
                 rules={{
-                  min: { value: 0, message: 'Price must be positive' }
+                  min: { value: 0, message: 'El precio debe ser positivo' }
                 }}
                 render={({ field }) => (
                   <Input
@@ -136,19 +144,96 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
               />
             </FormItem>
 
-            <FormItem label="Image URL">
+            <FormItem label="URL de Imagen">
               <Controller
                 name="imageUrl"
                 control={control}
                 render={({ field }) => (
                   <Input
                     size="sm"
-                    placeholder="https://example.com/image.jpg"
+                    placeholder="https://ejemplo.com/imagen.jpg"
                     {...field}
                   />
                 )}
               />
             </FormItem>
+
+            <FormItem label="Asociar con Tienda (Opcional)">
+              <Controller
+                name="storeId"
+                control={control}
+                render={({ field }) => {
+                  const options = stores.map(store => ({
+                    label: store.name,
+                    value: store.id
+                  }))
+                  const selectedValue = options.find(option => option.value === field.value)
+
+                  return (
+                    <Select
+                      options={options}
+                      value={selectedValue}
+                      onChange={(selectedOption) => {
+                        field.onChange(selectedOption?.value)
+                        // Clear store-specific fields if no store selected
+                        if (!selectedOption?.value) {
+                          setValue('storePrice', undefined)
+                          setValue('storeStock', undefined)
+                        }
+                      }}
+                      placeholder={storesLoading ? "Cargando tiendas..." : "Seleccionar una tienda (opcional)"}
+                      disabled={storesLoading}
+                    />
+                  )
+                }}
+              />
+            </FormItem>
+
+            {selectedStoreId && (
+              <>
+                <FormItem label="Precio en Tienda" error={errors.storePrice?.message}>
+                  <Controller
+                    name="storePrice"
+                    control={control}
+                    rules={{
+                      required: 'El precio en tienda es obligatorio al asociar con una tienda',
+                      min: { value: 0, message: 'El precio debe ser positivo' }
+                    }}
+                    render={({ field }) => (
+                      <Input
+                        type="number"
+                        size="sm"
+                        placeholder="0.00"
+                        step="0.01"
+                        {...field}
+                        onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                      />
+                    )}
+                  />
+                </FormItem>
+
+                <FormItem label="Stock Inicial" error={errors.storeStock?.message}>
+                  <Controller
+                    name="storeStock"
+                    control={control}
+                    rules={{
+                      required: 'El stock inicial es obligatorio al asociar con una tienda',
+                      min: { value: 0, message: 'El stock debe ser no negativo' }
+                    }}
+                    render={({ field }) => (
+                      <Input
+                        type="number"
+                        size="sm"
+                        placeholder="0"
+                        min="0"
+                        {...field}
+                        onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                      />
+                    )}
+                  />
+                </FormItem>
+              </>
+            )}
           </div>
           <div className='flex flex-row gap-1'>
             <Button
@@ -159,7 +244,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
               className="px-3 py-1 bg-blue-600 text-white hover:bg-blue-700"
               loading={loading}
             >
-              Create Product
+              Crear Producto
             </Button>
             <Button
               type='button'
@@ -168,7 +253,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
               onClick={handleClear}
               className="px-3 py-1 bg-gray-600 text-white hover:bg-gray-700"
             >
-              Clear
+              Limpiar
             </Button>
           </div>
         </Form>

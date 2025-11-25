@@ -1,5 +1,8 @@
 FROM node:20-alpine
 
+# Instalar netcat para verificar conectividad con PostgreSQL
+RUN apk add --no-cache netcat-openbsd
+
 WORKDIR /app
 
 # Copiar archivos de dependencias primero
@@ -11,8 +14,11 @@ RUN npm install
 # Copiar el resto del código fuente
 COPY . .
 
+# Hacer ejecutable el script de inicialización
+RUN chmod +x init-db.sh
+
 # Exponer el puerto
 EXPOSE 3000
 
 # Comando por defecto (puede ser sobreescrito en docker-compose)
-CMD ["npm", "run", "start:dev"]
+CMD ["./init-db.sh", "npm", "run", "start:dev"]

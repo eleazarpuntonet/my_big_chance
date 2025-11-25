@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, IsNumber, Min } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsNumber, IsUUID, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
@@ -49,6 +49,39 @@ export class CreateProductDto {
   @IsOptional()
   @IsString()
   imageUrl?: string;
+
+  @ApiPropertyOptional({
+    description: 'Store ID to associate the product with (optional)',
+    example: '123e4567-e89b-12d3-a456-426614174000'
+  })
+  @IsOptional()
+  @IsUUID()
+  storeId?: string;
+
+  @ApiPropertyOptional({
+    description: 'Store-specific price (required if storeId is provided)',
+    example: 2.75,
+    minimum: 0,
+    type: 'number',
+    format: 'decimal'
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  storePrice?: number;
+
+  @ApiPropertyOptional({
+    description: 'Initial stock for the store (required if storeId is provided)',
+    example: 50,
+    minimum: 0,
+    type: 'number'
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  storeStock?: number;
 }
 
 export class UpdateProductDto {

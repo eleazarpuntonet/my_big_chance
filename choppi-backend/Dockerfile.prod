@@ -15,11 +15,14 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Compile seed script
-RUN npx tsc seed.ts --outDir dist --target ES2023 --module nodenext --moduleResolution nodenext --esModuleInterop --allowSyntheticDefaultImports --experimentalDecorators --emitDecoratorMetadata
+# Compile seed script to JavaScript
+RUN npx tsc seed.ts --outDir dist --target ES2020 --module commonjs --moduleResolution node --esModuleInterop --allowSyntheticDefaultImports --experimentalDecorators --emitDecoratorMetadata --skipLibCheck
 
 # Production stage
 FROM node:20-alpine
+
+# Install netcat for database connectivity checks
+RUN apk add --no-cache netcat-openbsd
 
 WORKDIR /app
 
@@ -35,8 +38,12 @@ COPY --from=builder /app/dist ./dist
 # Copy compiled seed script
 COPY --from=builder /app/dist/seed.js ./seed.js
 
+# Copy initialization script
+COPY init-db.sh ./
+RUN chmod +x init-db.sh
+
 # Expose port
 EXPOSE 3000
 
-# Start the application
-CMD ["node", "dist/src/main"]
+# Use initialization script as entrypoint
+CMD ["./init-db.sh"]

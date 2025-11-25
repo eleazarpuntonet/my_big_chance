@@ -18,6 +18,9 @@ export interface CreateProductDto {
   basePrice?: number;
   category?: string;
   imageUrl?: string;
+  storeId?: string;
+  storePrice?: number;
+  storeStock?: number;
 }
 
 export interface UpdateProductDto {

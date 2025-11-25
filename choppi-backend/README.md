@@ -2,6 +2,9 @@
 
 Backend API for the Choppi full-stack application built with NestJS, TypeORM, and PostgreSQL.
 
+## Status
+✅ **Completed**: Backend fully implemented with all required APIs, authentication, and database seeding. Ready for production deployment.
+
 ## Features
 
 - **Authentication**: JWT-based authentication with login/register
@@ -9,7 +12,7 @@ Backend API for the Choppi full-stack application built with NestJS, TypeORM, an
 - **Products Catalog**: Global product management
 - **Store Products**: Per-store product inventory with pricing and stock
 - **Cart Calculation**: Optional cart quote endpoint
-- **Swagger Documentation**: Complete API documentation
+- **Swagger Documentation**: Complete API documentation at `/api`
 - **Database Seeding**: Sample data for development
 
 ## Tech Stack
@@ -50,7 +53,40 @@ PORT=3000
 
 ## Database Setup
 
-The application uses TypeORM with synchronization enabled for development. For production, use migrations.
+### From Scratch (Recommended)
+If working with Docker images from scratch:
+
+1. **Build and start services**:
+```bash
+# From project root
+docker compose up --build
+```
+
+2. **Database structure creation**:
+   - **Development**: TypeORM synchronizes tables automatically
+   - **Production**: Migrations run automatically in container
+
+3. **Populate with sample data**:
+```bash
+# Access backend container
+docker compose exec choppi-backend bash
+
+# Run seed script
+npm run seed
+```
+
+This creates:
+- 3 sample stores
+- 20 sample products
+- Store-product associations with randomized pricing/stock
+
+### Local Development
+For local development without Docker:
+
+1. **Ensure PostgreSQL is running locally**
+2. **Install dependencies**: `npm install`
+3. **Configure .env** with local database credentials
+4. **Run migrations/seeding**: `npm run seed`
 
 ## Running the Application
 
@@ -64,19 +100,6 @@ npm run start:prod
 # Debug mode
 npm run start:debug
 ```
-
-## Seeding the Database
-
-To populate the database with sample data:
-
-```bash
-npm run seed
-```
-
-This will create:
-- 3 sample stores
-- 20 sample products
-- Store-product associations with varying prices and stock
 
 ## API Documentation
 
@@ -110,6 +133,21 @@ Once the application is running, visit:
 ### Cart (Optional)
 - `POST /cart/quote` - Calculate cart total price
 
+## Production Deployment
+
+The backend is deployed at `http://18.218.246.134/api` with full Swagger documentation ready for creating new records.
+
+For production deployment:
+1. Set `NODE_ENV=production`
+2. Use database migrations instead of synchronization
+3. Configure proper JWT secret
+4. Set up proper database credentials
+5. Use a process manager like PM2
+
+## Docker Development
+
+The application is configured to work with Docker Compose. See the main project README for Docker setup instructions.
+
 ## Testing
 
 ```bash
@@ -139,19 +177,6 @@ src/
 ├── app.service.ts        # Main service
 └── main.ts              # Application entry point
 ```
-
-## Docker Development
-
-The application is configured to work with Docker Compose. See the main project README for Docker setup instructions.
-
-## Production Deployment
-
-For production deployment:
-1. Set `NODE_ENV=production`
-2. Use database migrations instead of synchronization
-3. Configure proper JWT secret
-4. Set up proper database credentials
-5. Use a process manager like PM2
 
 ## License
 

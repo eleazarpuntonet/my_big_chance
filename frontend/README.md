@@ -1,92 +1,170 @@
-# repositorio base
+# Choppi Frontend (Next.js)
 
+Frontend de la aplicación Choppi construido con Next.js, TypeScript y Tailwind CSS. Parte de la solución full-stack completa que incluye backend NestJS y aplicación móvil Flutter.
 
+## Características
 
-## Getting started
+- **Framework**: Next.js con App Router
+- **Lenguaje**: TypeScript con tipado estricto
+- **Estilos**: Tailwind CSS con PostCSS
+- **Estado Global**: Zustand para gestión de estado
+- **API Integration**: Axios a través de capa ApiService
+- **Formularios**: React Hook Form con validación Zod
+- **UI Components**: Componentes reutilizables siguiendo patrón ECME
+- **Autenticación**: JWT con contexto de autenticación
+- **Navegación**: Catálogo completo de tiendas y productos
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Arquitectura
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+El frontend sigue una arquitectura basada en características (feature-based):
 
 ```
-cd existing_repo
-git remote add origin http://gitlab.ks2-tech.com/developers/repositorio-base.git
-git branch -M main
-git push -uf origin main
+src/
+├── views/              # Páginas Next.js (App Router)
+│   └── [feature]/
+│       ├── views/      # Componentes de página
+│       ├── components/ # Componentes UI específicos
+│       ├── store/      # Stores Zustand
+│       ├── hooks/      # Hooks personalizados
+│       ├── repositories/ # Capa de acceso a datos
+│       ├── services/   # Lógica de negocio
+│       └── types/      # Tipos TypeScript
+├── components/         # Componentes compartidos
+├── services/           # Servicios globales (ApiService)
+├── store/             # Stores globales
+└── utils/              # Utilidades
 ```
 
-## Integrate with your tools
+## Instalación
 
-- [ ] [Set up project integrations](http://gitlab.ks2-tech.com/developers/repositorio-base/-/settings/integrations)
+```bash
+# Instalar dependencias
+npm install
+```
 
-## Collaborate with your team
+## Variables de Entorno
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+Crear archivo `.env.local`:
 
-## Test and Deploy
+```bash
+# URL de la API del backend
+VITE_APIURL=http://localhost:3000
 
-Use the built-in continuous integration in GitLab.
+# En producción
+VITE_APIURL=http://18.218.246.134/api
+```
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+## Desarrollo Local
 
-***
+```bash
+# Iniciar servidor de desarrollo
+npm run dev
 
-# Editing this README
+# Construir para producción
+npm run build
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+# Vista previa de producción
+npm run preview
+```
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+## Docker
 
-## Name
-Choose a self-explaining name for your project.
+El frontend está configurado para ejecutarse en Docker:
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+```bash
+# Desarrollo con Docker Compose
+docker compose up --build
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+# Acceder en: http://localhost:5000
+```
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## Características Implementadas
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+### Páginas
+- `/login` - Autenticación de usuarios
+- `/stores` - Lista de tiendas con búsqueda y paginación
+- `/stores/[id]` - Detalle de tienda con productos
+- `/products/[id]` - Detalle de producto
+- `/admin` - Panel de administración (bonus)
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+### Funcionalidades
+- **Autenticación**: Login/register con JWT
+- **Catálogo**: Navegación completa de tiendas y productos
+- **Búsqueda**: Búsqueda por nombre con paginación
+- **Filtros**: Filtro por productos en stock
+- **Estados**: Manejo de carga, errores y estados vacíos
+- **Responsive**: Diseño adaptativo para móviles y desktop
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+### UI/UX
+- **Headers Modernos**: Gradientes con iconos Tabler
+- **Cards**: Diseño consistente con sombras y bordes
+- **Formularios**: Patrón Controller con RHF y ButtonGroup
+- **Notificaciones**: Toast para éxito y errores
+- **Paleta de Colores**: Esquema consistente (Naranja #FAA531 como primario)
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+## API Integration
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+- **Capa ApiService**: Centralización de llamadas HTTP
+- **Manejo de Errores**: Patrón consistente con notificaciones
+- **Estados de Carga**: Loading states en todas las operaciones
+- **Autenticación**: Bearer token automático en headers
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+## Testing
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+```bash
+# Ejecutar tests
+npm run test
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+# Coverage
+npm run test:coverage
+```
 
-## License
-For open source projects, say how it is licensed.
+## Producción
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+El frontend está desplegado en `http://18.218.246.134/app` a través de Traefik.
+
+Para deploy local en producción:
+
+```bash
+docker compose -f docker-compose.production.yml up --build
+```
+
+## Dependencias Principales
+
+- `next`: Framework React
+- `react`: Biblioteca UI
+- `typescript`: Tipado
+- `tailwindcss`: Estilos
+- `zustand`: Estado global
+- `axios`: HTTP client
+- `react-hook-form`: Formularios
+- `@hookform/resolvers`: Validación
+- `react-icons/tb`: Iconos Tabler
+
+## Scripts Disponibles
+
+```bash
+npm run dev          # Desarrollo
+npm run build        # Build producción
+npm run start        # Start producción
+npm run preview      # Vista previa
+npm run lint         # Linting
+npm run test         # Tests
+```
+
+## Contribución
+
+El frontend sigue las pautas establecidas en las instrucciones del proyecto. Para nuevas características:
+
+1. Crear estructura de módulo en `src/views/[feature]/`
+2. Definir tipos en `types/`
+3. Implementar repositorio para API calls
+4. Crear servicio para lógica de negocio
+5. Configurar store Zustand
+6. Construir componentes siguiendo patrón ECME
+7. Crear vistas Next.js
+8. Agregar rutas en App Router
+
+## Estado
+
+✅ **Completado**: Frontend totalmente funcional con todas las características requeridas.

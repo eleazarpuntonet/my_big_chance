@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, ILike } from 'typeorm';
 import { Product } from '../entities/product.entity';
+import { StoreProduct } from '../entities/store-product.entity';
 import { CreateProductDto, UpdateProductDto, GetProductsQueryDto } from './dto/product.dto';
 
 @Injectable()
@@ -9,11 +10,32 @@ export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
+    @InjectRepository(StoreProduct)
+    private storeProductRepository: Repository<StoreProduct>,
   ) {}
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
-    const product = this.productRepository.create(createProductDto);
-    return this.productRepository.save(product);
+    const { storeId, storePrice, storeStock, ...productData } = createProductDto;
+
+    const product = this.productRepository.create(productData);
+    const savedProduct = await this.productRepository.save(product);
+
+    // If storeId is provided, create the store-product association
+    if (storeId) {
+      if (!storePrice || storeStock === undefined) {
+        throw new Error('storePrice and storeStock are required when storeId is provided');
+      }
+
+      const storeProduct = this.storeProductRepository.create({
+        storeId,
+        productId: savedProduct.id,
+        price: storePrice,
+        stock: storeStock,
+      });
+      await this.storeProductRepository.save(storeProduct);
+    }
+
+    return savedProduct;
   }
 
   async findAll(query: GetProductsQueryDto): Promise<{ data: Product[]; total: number; page: number; limit: number }> {

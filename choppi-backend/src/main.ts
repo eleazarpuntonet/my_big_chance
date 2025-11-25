@@ -25,6 +25,7 @@ async function bootstrap() {
     .setDescription('API for Choppi full-stack application')
     .setVersion('1.0')
     .addServer('http://localhost:3000', 'Development server')
+    .addServer('http://172.31.75.75/api', 'Production server')
     .addTag('auth', 'Authentication endpoints')
     .addTag('stores', 'Store management endpoints')
     .addTag('products', 'Product catalog endpoints')

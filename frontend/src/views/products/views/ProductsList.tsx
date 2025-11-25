@@ -8,7 +8,7 @@ import { Notification, toast } from '@/components/ui'
 
 const ProductsList = () => {
   const navigate = useNavigate()
-  const { products, loading, error, productsPagination, fetchProducts, clearError } = useProductStore()
+  const { products, loading, error, pagination, fetchProducts, clearError } = useProductStore()
   const [searchQuery, setSearchQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
 
@@ -124,12 +124,12 @@ const ProductsList = () => {
           </div>
 
           {/* Pagination */}
-          {productsPagination.total > productsPagination.limit && (
+          {pagination.total > pagination.limit && (
             <div className="flex justify-center">
               <Pagination
                 currentPage={currentPage}
-                total={productsPagination.total}
-                pageSize={productsPagination.limit}
+                total={pagination.total}
+                pageSize={pagination.limit}
                 onChange={handlePageChange}
               />
             </div>
